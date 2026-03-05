@@ -1,0 +1,34 @@
+<footer class="site-footer">
+  <div class="container footer-container">
+    <div class="footer-info">
+      <h3 class="footer-title">{{ site.lab.name }}</h3>
+      <p class="footer-desc">{{ site.lab.university }}</p>
+      <address class="footer-address">
+        {{ site.contact.address | newline_to_br }}
+      </address>
+    </div>
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <ul>
+        {% for item in site.navigation %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p><a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></p>
+      <p>{{ site.contact.phone }}</p>
+      <div class="social-links">
+        {% if site.social.twitter %}<a href="{{ site.social.twitter }}" target="_blank">Twitter</a>{% endif %}
+        {% if site.social.github %}<a href="{{ site.social.github }}" target="_blank">GitHub</a>{% endif %}
+        {% if site.social.linkedin %}<a href="{{ site.social.linkedin }}" target="_blank">LinkedIn</a>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; {{ site.time | date: "%Y" }} {{ site.lab.name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
