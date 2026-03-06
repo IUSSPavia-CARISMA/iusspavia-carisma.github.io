@@ -6,8 +6,14 @@ role: "Professor"
 group: "Professor"
 sort_order: 5
 email: ""
-orcid: ""
+orcid: "https://orcid.org/0000-0003-2514-314X"
+iuss_page: "https://www.iusspavia.it/en/contacts/dimosthenis-sarigiannis"
+iuss_research: "https://research.iusspavia.it/simple-search?query=Sarigiannis"
 photo: ""
 ---
 
-The official IUSS contact page lists Denis Sarigiannis as a professor in environmental and sanitary engineering and links to his curriculum and publication record. That page does not currently provide a short biography text, so this profile should be expanded manually if you want a fuller overview here.
+Denis Sarigiannis is listed by IUSS Pavia as a professor in environmental and sanitary engineering. The current IUSS page links to his curriculum and publication record but does not provide a short biography summary.
+
+[IUSS profile](https://www.iusspavia.it/en/contacts/dimosthenis-sarigiannis)
+
+[IUSS research profile](https://research.iusspavia.it/simple-search?query=Sarigiannis)
