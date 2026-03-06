@@ -12,28 +12,27 @@ baseurl: "/lab-website"
 # Lab Information
 lab:
   name: "CARISMA Lab"
-  tagline: "Where Agriculture Meets Innovation"
-  department: "Department of Crop Science"
-  university: "University Name"
-  location: "City, Country"
-  founded: 2018
+  tagline: "Climate insight and risk intelligence for a sustainable future"
+  department: "Climate, Sustainability and Risk"
+  university: "Scuola Universitaria Superiore Pavia"
+  location: "Pavia, Italy"
+  founded: 2008
 
-# Contact Information
 contact:
-  email: "lab@university.edu"
-  phone: "+1 (555) 123-4567"
+  email: "marco.gaetani@iusspavia.it; carisma@iusspavia.it"
+  phone: "Tel: +39 0382 375811"
   address: |
-    Building Name, Room 123
-    123 University Avenue
-    City, ST 12345
-  map_link: "https://maps.google.com/..."
+    Piazza Ercole Marelli 15
+    27100 Pavia, Italy
+    Second floor
+  map_link: "https://www.bing.com/maps/search?FORM=HDRSC6&style=r&cp=45.191269~9.148983&lvl=18.5"
 
 # Social Links
 social:
-  twitter: "https://twitter.com/labhandle"
-  github: "https://github.com/laborg"
-  linkedin: "https://linkedin.com/company/lab"
-  bluesky: "https://bsky.app/profile/lab.bsky.social"
+  # twitter: "https://twitter.com/labhandle"
+  github: "https://github.com/IUSSPavia-CARISMA"
+  # linkedin: "https://linkedin.com/company/lab"
+  # bluesky: "https://bsky.app/profile/lab.bsky.social"
 
 # Navigation
 navigation:
