@@ -5,10 +5,6 @@ permalink: /publications/
 ---
 
 <div class="prose-block">
-  <p>Publications are available through the IUSS Pavia research profiles of CARISMA members.</p>
-  <ul class="link-list">
-    {% for item in site.lab.publications %}
-    <li><a href="{{ item.url }}" target="_blank" rel="noreferrer">{{ item.name }}</a></li>
-    {% endfor %}
-  </ul>
+  <p>This site does not maintain a standalone publications section.</p>
+  <p>For publication records, use the individual researcher pages in <a href="{{ '/people/' | relative_url }}">People</a> or the official IUSS research profiles linked from those pages.</p>
 </div>
