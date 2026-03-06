@@ -157,7 +157,7 @@ img {
 }
 
 .logo-icon {
-  height: 32px;   /* adjust to match your nav height */
+  height: 40px;
   width: auto;
   display: block;
 }
@@ -227,7 +227,9 @@ img {
 .hero-image-placeholder {
   background-color: var(--color-light);
   border-radius: var(--radius-lg);
-  height: 500px;
+  height: 400px;
+  max-width: 500px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
