@@ -194,7 +194,7 @@ img {
 }
 
 .centre-hero-shell {
-  max-width: 980px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 
@@ -212,10 +212,12 @@ img {
 }
 
 .centre-title {
-  font-size: clamp(2.5rem, 4vw, 4.75rem);
-  line-height: 1.05;
-  max-width: 12ch;
+  font-size: clamp(3.25rem, 6vw, 6.5rem);
+  line-height: 0.98;
+  max-width: 24ch;
   margin-bottom: var(--spacing-md);
+  letter-spacing: -0.03em;
+  text-wrap: unset;
 }
 
 .centre-acronym {
@@ -229,7 +231,7 @@ img {
 
 .centre-summary {
   font-size: 1.2rem;
-  max-width: 56ch;
+  max-width: 68ch;
   color: var(--color-text);
   margin-bottom: 1.5rem;
 }
@@ -237,13 +239,6 @@ img {
 .centre-affiliation {
   margin-bottom: 1.5rem;
   color: var(--color-muted);
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-bottom: 2.5rem;
 }
 
 .hero-facts {
@@ -936,11 +931,6 @@ img {
 
   .centre-hero {
     padding-top: 3rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .hero-facts,

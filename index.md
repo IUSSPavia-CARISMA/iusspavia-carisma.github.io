@@ -12,25 +12,6 @@ title: CARISMA
       <p class="centre-summary">{{ site.lab.tagline }}</p>
       <p class="centre-affiliation">
         Part of <a href="https://www.iusspavia.it/en" target="_blank" rel="noreferrer">IUSS Pavia</a>.
-      </p>
-      <div class="hero-actions">
-        <a href="{{ '/research/' | relative_url }}" class="btn btn-primary">Research Areas</a>
-        <a href="{{ '/people/' | relative_url }}" class="btn btn-outline">People</a>
-        <a href="{{ '/contact/' | relative_url }}" class="btn btn-outline">Contact</a>
-      </div>
-      <div class="hero-facts">
-        <div class="hero-fact">
-          <p class="hero-fact-label">Focus</p>
-          <p class="hero-fact-text">Climate change, impacts, risk management and sustainable development.</p>
-        </div>
-        <div class="hero-fact">
-          <p class="hero-fact-label">Approach</p>
-          <p class="hero-fact-text">Earth-system science, engineering, economics and policy in one research centre.</p>
-        </div>
-        <div class="hero-fact">
-          <p class="hero-fact-label">Training</p>
-          <p class="hero-fact-text">Connected to IUSS Pavia and the National PhD in Sustainable Development and Climate Change.</p>
-        </div>
       </div>
     </div>
   </div>
