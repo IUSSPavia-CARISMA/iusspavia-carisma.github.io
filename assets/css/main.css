@@ -53,13 +53,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: var(--color-primary);
+  color: #7ea63a;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-dark);
+  color: #9DC545;
 }
 
 img {
@@ -1218,7 +1218,7 @@ img {
   left: 0;
   right: 0;
   height: 3rem;
-  background-color: var(--color-light);
+  background-color: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1630,5 +1630,95 @@ img {
 
   .person-card-photo .person-photo-placeholder {
     font-size: 2rem;
+  }
+}
+
+/* Contact Section */
+.contact-intro {
+  font-size: 1.1rem;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-xl);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.contact-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.contact-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.contact-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e8f5d9 0%, #d4e9c1 100%);
+  color: #7ea63a;
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.contact-card-content a {
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.contact-card-content a:hover {
+  color: var(--color-dark);
+}
+
+.contact-card-content span {
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.contact-card-content address {
+  font-style: normal;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.contact-label {
+  color: var(--color-muted) !important;
+  font-size: 0.9rem !important;
+}
+
+.contact-map-link {
+  display: inline-block;
+  margin-top: var(--spacing-sm);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -10,7 +10,8 @@ permalink: /news/
 </div>
 
 <div class="news-list">
-  {% for post in site.news %}
+  {% assign sorted_news = site.news | sort: "date" | reverse %}
+  {% for post in sorted_news %}
   <article class="news-item news-item-bordered">
     <time class="news-date" datetime="{{ post.date | date_to_xmlschema }}">
       {{ post.date | date: "%B %-d, %Y" }}
