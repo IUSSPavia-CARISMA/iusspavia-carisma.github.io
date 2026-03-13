@@ -6,7 +6,7 @@ role: "Head"
 group: "Head"
 sort_order: 1
 email: "marco.gaetani@iusspavia.it"
-researchgate: ""
+researchgate: "https://www.researchgate.net/profile/Marco-Gaetani-2"
 linkedin: ""
 orcid: "https://orcid.org/0000-0003-2923-6773"
 iuss_page: "https://www.iusspavia.it/en/contacts/marco-gaetani"

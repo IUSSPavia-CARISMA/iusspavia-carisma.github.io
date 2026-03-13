@@ -7,7 +7,7 @@ group: "PhD Student"
 phd_program: "PhD programme details can be updated here."
 sort_order: 6
 email: "marco.chericoni@iusspavia.it"
-researchgate: ""
+researchgate: "https://www.researchgate.net/profile/Marco-Chericoni-2"
 linkedin: ""
 photo: ""
 ---

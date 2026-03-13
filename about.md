@@ -53,10 +53,16 @@ permalink: /about/
       <p>IUSS aims to contribute to the full enhancement of talented young people, taking care of their research training. In this spirit, IUSS coordinates the National PhD Programme in Sustainable Development and Climate Change (<a href="https://www.phd-sdc.it/">PhD SDC</a>), a three-year, fully English-taught doctoral programme co-funded by the Italian Ministry of University and Research. The programme trains the next generation of researchers to address climate change from multiple disciplinary angles, spanning Earth system science, socio-economic analysis, law, technology, and territorial governance. CARISMA serves as the scientific backbone of IUSS contribution to this programme.</p>
       <p>The main building of IUSS Pavia is the historic Palazzo del Broletto in Piazza Vittoria 15, a 12th-century complex and one of Pavia's most prominent medieval landmarks. You can find instead our group at Palazzo Marelli, located in Piazza Ercole Marelli, part of a contemporary urban redevelopment of the former Ercole Marelli industrial area near the city's historic centre and close to the train station, now a mixed-use district hosting residential houses, private companies, medical labs and shops.</p>
       <p>You can then find our offices in Piazza Ercole Marelli 15 (second floor), Pavia, Italy. Follow the instructions to find us:</p>
-      <ul class="plain-list">
-        <li><a href="https://www.google.com/maps/dir//Istituto+Universitario+di+Studi+Superiori(IUSS+Pavia),+P.za+Ercole+Marelli,+27100+Pavia+PV/@45.1865094,9.1520175,17z/data=!4m9!4m8!1m0!1m5!1m1!1s0x4787276f65befecf:0x4e381ab1bbdf6ccb!2m2!1d9.149596!2d45.1914915!3e2?entry=ttu&g_ep=EgoyMDI2MDMwOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer">Open map directions</a></li>
-        <li><a href="{{ '/assets/pdf/how_to_find_us.pdf' | relative_url }}" target="_blank" rel="noreferrer">Open pdf directions</a></li>
-      </ul>
+      <div class="direction-buttons">
+        <a href="https://www.google.com/maps/dir//Istituto+Universitario+di+Studi+Superiori(IUSS+Pavia),+P.za+Ercole+Marelli,+27100+Pavia+PV/@45.1865094,9.1520175,17z/data=!4m9!4m8!1m0!1m5!1m1!1s0x4787276f65befecf:0x4e381ab1bbdf6ccb!2m2!1d9.149596!2d45.1914915!3e2?entry=ttu&g_ep=EgoyMDI2MDMwOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" class="direction-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span>Open map directions</span>
+        </a>
+        <a href="{{ '/assets/pdf/how_to_find_us.pdf' | relative_url }}" target="_blank" rel="noreferrer" class="direction-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Open PDF directions</span>
+        </a>
+      </div>
     </div>
     <div id="place-images" class="place-images">
       <figure class="history-image-card">

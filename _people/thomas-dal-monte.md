@@ -7,7 +7,7 @@ group: "PhD Student"
 phd_program: "PhD programme details can be updated here."
 sort_order: 6
 email: "thomas.dalmonte@iusspavia.it"
-researchgate: ""
+researchgate: "https://www.researchgate.net/profile/Thomas-Dal-Monte"
 linkedin: ""
 photo: ""
 ---

@@ -7,7 +7,7 @@ group: "PhD Student"
 phd_program: "PhD programme details can be updated here."
 sort_order: 5
 email: "mohamed.hamitouche@iusspavia.it"
-researchgate: ""
+researchgate: "https://www.researchgate.net/profile/Mohamed-Hamitouche"
 linkedin: ""
 photo: ""
 ---

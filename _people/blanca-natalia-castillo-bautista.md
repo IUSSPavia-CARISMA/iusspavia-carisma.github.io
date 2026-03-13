@@ -7,7 +7,7 @@ group: "PhD Student"
 phd_program: "PhD programme details can be updated here."
 sort_order: 2
 email: "blanca.castillo@iusspavia.it"
-researchgate: ""
+researchgate: "https://www.researchgate.net/profile/Natalia-Castillo"
 orcid: ""
 linkedin: ""
 photo: ""
