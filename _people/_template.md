@@ -10,7 +10,6 @@ slug: "firstname-lastname"               # URL-friendly name (lowercase, hyphens
 position: "PhD Student"                  # Display position (e.g., "PhD Student", "Postdoctoral Researcher", "Associate Professor")
 role: "PhD Student"                      # Role category for filtering
 group: "PhD Student"                     # Group for sorting (e.g., "Head of Centre", "Associate Professor", "PhD Student")
-sort_order: 3                            # Sort order within group (1=highest priority)
 
 # PhD specific (only for PhD students)
 phd_program: "PhD SDC - Sustainable Development and Climate Change"

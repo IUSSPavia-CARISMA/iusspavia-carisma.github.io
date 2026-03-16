@@ -13,7 +13,7 @@ permalink: /about/
     <div>
       <p><strong>{{ site.lab.full_name }} ({{ site.lab.name }})</strong> was founded in {{ site.lab.founded }} at {{ site.lab.university }} and is led by {{ site.lab.head }}.</p>
       <p>The origins of CARISMA lie in research activities developed at IUSS Pavia within the ROSE School, originally focused on earthquake risk assessment. Over time, the research scope progressively expanded to include flood risk with HYRIS (hydrogeological risks) curriculum and, more broadly, the impacts of climate change on natural hazards. The integration of these research lines between 2014 and 2018 led to the creation of a dedicated research group in 2019, initially named CLIMAX. As the group expanded, its activities evolved towards a unified framework aimed at understanding and managing extreme events and climate related risks. This process ultimately resulted in the establishment of CARISMA, which brings together expertise in engineering, physics, and economics to advance research on climate related risks and to support evidence based risk management strategies.</p> 
-      <p>The group currently consists of 34 members.</p>
+      <p>The group currently consists of 31 members.</p>
     </div>
     <div class="history-images">
       <figure class="history-image-card">

@@ -4,7 +4,6 @@ slug: "beatrice-monteleone"
 position: "Postdoctoral Researcher"
 role: "Postdoc"
 group: "Postdoc"
-sort_order: 1
 email: "beatrice.monteleone@iusspavia.it"
 researchgate: ""
 orcid: ""

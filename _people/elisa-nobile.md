@@ -5,7 +5,6 @@ position: "PhD Student"
 role: "PhD Student"
 group: "PhD Student"
 phd_program: "PhD programme details can be updated here."
-sort_order: 3
 email: "elisa.nobile@iusspavia.it"
 researchgate: "https://www.researchgate.net/profile/Elisa-Nobile"
 orcid: "https://orcid.org/0009-0005-2665-8710"

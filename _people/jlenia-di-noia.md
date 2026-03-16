@@ -4,7 +4,6 @@ slug: "jlenia-di-noia"
 position: "Postdoctoral Researcher"
 role: "Postdoc"
 group: "Postdoc"
-sort_order: 3
 email: "jlenia.dinoia@iusspavia.it"
 researchgate: ""
 orcid: ""
@@ -12,4 +11,4 @@ linkedin: ""
 photo: ""
 ---
 
-Profile details for Dott.ssa Jlenia Di Noia can be updated here.
+Profile details for Jlenia Di Noia can be updated here.

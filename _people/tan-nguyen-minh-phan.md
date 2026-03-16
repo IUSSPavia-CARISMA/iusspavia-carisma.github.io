@@ -5,11 +5,10 @@ position: "PhD Student"
 role: "PhD Student"
 group: "PhD Student"
 phd_program: "PhD programme details can be updated here."
-sort_order: 13
 email: "tan.phan@iusspavia.it"
 researchgate: ""
 linkedin: ""
 photo: ""
 ---
 
-Profile details for Dr. Tan Nguyen Minh Phan can be updated here.
+Profile details for Tan Nguyen Minh Phan can be updated here.
