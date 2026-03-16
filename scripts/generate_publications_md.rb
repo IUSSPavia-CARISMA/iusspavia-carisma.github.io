@@ -3,6 +3,7 @@
 
 require 'roo'
 require 'time'
+require 'set'
 
 XLSX_PATH = File.expand_path('../assets/CARISMA_publications.xlsx', __dir__)
 OUTPUT_PATH = File.expand_path('../publications.md', __dir__)
@@ -28,54 +29,139 @@ end
 
 
 def extract_surname(full_name)
-  name = normalize_space(full_name)
-  return '' if name.empty?
+  surname, = parse_name_parts(full_name)
+  surname
+end
 
-  # Handle "Surname, Initials" format (e.g., "Dal Monte, T.", "Nobile, E.")
+
+def extract_initials(full_name)
+  _, initials = parse_name_parts(full_name)
+  initials
+end
+
+
+def initial_token?(token)
+  cleaned = normalize_space(token).gsub(/[^A-Za-z.]/, '')
+  return false if cleaned.empty?
+  return true if cleaned.match?(/\A([A-Za-z]\.)+\z/)
+  return true if cleaned.match?(/\A[A-Za-z]{1,3}\.?\z/)
+
+  false
+end
+
+
+def initials_from_tokens(tokens)
+  tokens.map do |token|
+    cleaned = token.to_s.gsub(/[^A-Za-z]/, '')
+    next '' if cleaned.empty?
+    token.to_s.include?('.') ? cleaned : cleaned[0]
+  end.join.upcase
+end
+
+
+def parse_name_parts(full_name)
+  name = normalize_space(full_name)
+  return ['', ''] if name.empty?
+
   if name.include?(',')
-    surname = name.split(',').first.to_s.strip
-    return surname unless surname.empty?
+    surname = normalize_space(name.split(',', 2).first.to_s)
+    given = normalize_space(name.split(',', 2).last.to_s)
+    initials = initials_from_tokens(given.split(/\s+/))
+    return [surname, initials]
   end
 
-  # Handle "Initials Surname" format (e.g., "M. Gaetani", "L.T. Massano")
-  # Reject initials: single letters (M, E) or compound initials (L.T., M.L.V.)
-  parts = name.split(/\s+/).reject { |p| p.match?(/\A([A-Z]\.)+\z/i) || p.match?(/\A[A-Z]\z/i) }
-  parts.last.to_s.strip
+  tokens = name.split(/\s+/)
+  return [tokens.first.to_s, ''] if tokens.length == 1
+
+  # Case: "I. Surname"
+  if initial_token?(tokens.first) && !initial_token?(tokens.last)
+    return [tokens.last, initials_from_tokens(tokens[0...-1])]
+  end
+
+  # Case: "Surname I." or "Surname I.J."
+  trailing = []
+  idx = tokens.length - 1
+  while idx >= 0 && initial_token?(tokens[idx])
+    trailing.unshift(tokens[idx])
+    idx -= 1
+  end
+  unless trailing.empty? || idx < 0
+    surname = tokens[0..idx].join(' ')
+    return [surname, initials_from_tokens(trailing)]
+  end
+
+  # Fallback case: "GivenName Surname"
+  [tokens.last, initials_from_tokens(tokens[0...-1])]
+end
+
+
+def apply_to_unbolded_segments(text, pattern)
+  text.split(/(\*\*[^*]+\*\*)/).map do |segment|
+    if segment.start_with?('**') && segment.end_with?('**')
+      segment
+    else
+      segment.gsub(pattern) { |m| "**#{m}**" }
+    end
+  end.join
+end
+
+
+def surname_to_regex(surname)
+  escaped_parts = normalize_space(surname).split(/\s+/).map { |part| Regexp.escape(part) }
+  escaped_parts.join('\s+')
 end
 
 
 def bold_surnames(citation, carisma_authors)
   text = citation.to_s.dup
+  author_block, remainder = text.split(':', 2)
+  author_block ||= ''
 
-  carisma_authors.each do |author|
-    surname = extract_surname(author)
+  prepared_authors = carisma_authors.map do |author|
+    name = normalize_space(author)
+    surname = extract_surname(name)
+    initials = extract_initials(name)
+    [name, surname, initials]
+  end.reject { |_, surname, _| surname.empty? }
+
+  # Apply more specific variants first (e.g., "Massano L.T." before "Massano L.")
+  prepared_authors.sort_by! do |name, surname, initials|
+    [-surname.length, -initials.length, -name.length]
+  end
+
+  prepared_authors.each do |author, surname, initials|
     next if surname.empty?
 
-    # Skip if already bolded
-    next if text.match?(/\*\*[^*]*#{Regexp.escape(surname)}[^*]*\*\*/i)
+    surname_pattern = surname_to_regex(surname)
+    generic_initials_pattern = '[A-Z](?:\.[A-Z])*\.?(?:\s+[A-Z](?:\.[A-Z])*\.?)*'
+    initials_pattern = if initials.empty?
+                         generic_initials_pattern
+                       else
+                         chars = initials.chars.map { |c| Regexp.escape(c) }
+                         chars.join('\.?\s*') + '\.?'
+                       end
 
-    # Match full author name patterns - order matters!
     patterns = [
-      # "Surname, I." or "Surname, I.J." - initials with periods after comma
-      /(?<![*\p{L}])(#{Regexp.escape(surname)},\s*[A-Z]\.(?:[A-Z]\.)*)(?=\s*[,:&]|\s+and\s|\s*$)/i,
-      # "Surname I." or "Surname I.J." - initials with periods, space separated
-      /(?<![*\p{L}])(#{Regexp.escape(surname)}\s+[A-Z]\.(?:[A-Z]\.)*)(?=\s*[,:]|\s+and\s|\s*$)/i,
-      # "Surname I" or "Surname IJ" - initials WITHOUT periods (e.g., "Chericoni M")
-      /(?<![*\p{L}])(#{Regexp.escape(surname)}\s+[A-Z](?:\.[A-Z])*)(?=\s*[,:]|\s+and\s|\s*$)/i,
-      # "I. Surname" or "I.J. Surname" - initials before surname
-      /(?<![*\p{L}])((?:[A-Z]\.\s*)+#{Regexp.escape(surname)})(?![*\p{L}])/i,
-      # Just surname as fallback
-      /(?<![*\p{L}])(#{Regexp.escape(surname)})(?![*\p{L}])/i
+      # "I. Surname", "I.J. Surname"
+      /(?<![[:alpha:]*])(#{initials_pattern}\s+#{surname_pattern})(?![[:alpha:]*])/i,
+      # "Surname, I.", "Surname, I.J.", "Surname, I. J."
+      /(?<![[:alpha:]*])(#{surname_pattern},\s*#{initials_pattern})(?![[:alpha:]*])/i,
+      # "Surname I.", "Surname I.J.", "Surname I. J."
+      /(?<![[:alpha:]*])(#{surname_pattern}\s+#{initials_pattern})(?![[:alpha:]*])/i
     ]
+    # Use surname-only fallback only when no initials are available.
+    if initials.empty?
+      patterns << /(?<![[:alpha:]*])(#{surname_pattern})(?![[:alpha:]*])/i
+    end
 
     patterns.each do |pattern|
-      if text.match?(pattern)
-        text = text.sub(pattern) { |m| "**#{m}**" }
-        break
-      end
+      previous = author_block
+      author_block = apply_to_unbolded_segments(author_block, pattern)
+      break if author_block != previous
     end
   end
 
+  text = remainder ? "#{author_block}:#{remainder}" : author_block
   normalize_space(text)
 end
 
@@ -114,17 +200,27 @@ xlsx = Roo::Spreadsheet.open(XLSX_PATH)
 sheet = xlsx.sheet(0)
 headers = sheet.row(1).map { |h| h.to_s.strip.downcase }
 
+# Build a global CARISMA author list so all known CARISMA authors are bolded
+# wherever they appear in the citation author list.
+all_carisma_authors = Set.new
 (2..sheet.last_row).each do |i|
   row_data = sheet.row(i)
   row = headers.each_with_index.to_h { |header, idx| [header, row_data[idx]] }
 
-  # Collect all CARISMA authors from the relevant columns
-  carisma_authors = [
+  [
     value_for(row, ['carisma 1st author']),
     value_for(row, ['carisma other authors (1)']),
     value_for(row, ['carisma other authors (2)']),
-    value_for(row, ['carisma other authors (3)'])
-  ].reject(&:empty?)
+    value_for(row, ['carisma other authors (3)']),
+    value_for(row, ['carisma other authors (4)'])
+  ].each do |name|
+    all_carisma_authors << name unless name.empty?
+  end
+end
+
+(2..sheet.last_row).each do |i|
+  row_data = sheet.row(i)
+  row = headers.each_with_index.to_h { |header, idx| [header, row_data[idx]] }
 
   authors = value_for(row, ['authors'])
   title = value_for(row, ['title'])
@@ -146,7 +242,7 @@ headers = sheet.row(1).map { |h| h.to_s.strip.downcase }
   next if citation.empty?
 
   rows << {
-    citation: bold_surnames(citation, carisma_authors),
+    citation: bold_surnames(citation, all_carisma_authors.to_a),
     first_author: first_author_surname(authors)
   }
 end

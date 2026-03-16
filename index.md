@@ -20,7 +20,7 @@ title: CARISMA
     {% for paragraph in site.lab.overview.intro %}
     <p>{{ paragraph }}</p>
     {% endfor %}
-    <h2>Main Objectives</h2>
+    <h2>Main objectives</h2>
     <ul class="plain-list">
       {% for item in site.lab.overview.objectives %}
       <li>{{ item }}</li>
@@ -31,7 +31,7 @@ title: CARISMA
 
 <section class="centre-section" markdown="0">
   <div class="container">
-    <h2>Latest News</h2>
+    <h2>Latest news</h2>
     <div class="news-grid">
       {% assign latest_news = site.news | sort: "date" | reverse %}
       {% for post in latest_news limit:3 %}
@@ -53,7 +53,7 @@ title: CARISMA
 
 <section class="centre-section" markdown="0">
   <div class="container">
-    <h2>Latest Publications</h2>
+    <h2>Latest publications</h2>
     <div class="publications-grid">
       {% for pub in site.lab.recent_publications limit:3 %}
       <article class="publication-card">

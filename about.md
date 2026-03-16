@@ -8,7 +8,7 @@ permalink: /about/
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <div class="prose-block page-section">
-  <h2>Our History</h2>
+  <h2>Our history</h2>
   <div class="two-column-grid">
     <div>
       <p><strong>{{ site.lab.full_name }} ({{ site.lab.name }})</strong> was founded in {{ site.lab.founded }} at {{ site.lab.university }} and is led by {{ site.lab.head }}.</p>
@@ -27,13 +27,13 @@ permalink: /about/
     </div>
   </div>
   <figure class="history-image-featured history-image-card">
-    <img src="{{ '/assets/img/carisma_2026.jpeg' | relative_url }}" alt="CARISMA team 2026">
+    <img src="{{ '/assets/img/carisma_2026.jpg' | relative_url }}" alt="CARISMA team 2026">
     <figcaption>CARISMA team - 2026</figcaption>
   </figure>
 </div>
 
 <div class="prose-block page-section">
-  <h2>Our Team Around the World</h2>
+  <h2>Our team around the world</h2>
   <p>CARISMA brings together researchers from diverse backgrounds and nationalities, fostering a truly international research environment.</p>
   <div class="nationality-layout">
     <div class="nationality-map-wrap">
@@ -46,7 +46,7 @@ permalink: /about/
 </div>
 
 <div class="prose-block page-section">
-  <h2>Our Place</h2>
+  <h2>Our place</h2>
   <div class="two-column-grid place-layout">
     <div id="place-text" class="place-text">
       <p>CARISMA team is part of the University School for Advanced Studies IUSS Pavia, founded in 1997 in partnership with Pavia's historic merit colleges (Borromeo, Ghislieri, Nuovo, and Santa Caterina) and the Institute for the Right to Study (EDISU). Formally recognised as a university in 2005, IUSS belongs to the Federation of Italian Schools of Advanced Studies, institutions that share a common model of excellence-based, interdisciplinary advanced education.</p>

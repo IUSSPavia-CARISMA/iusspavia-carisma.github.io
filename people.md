@@ -5,7 +5,7 @@ permalink: /people/
 ---
 
 <div class="prose-block page-section">
-  <h2>Head of Research Centre</h2>
+  <h2>Head of research centre</h2>
   {% assign head = site.people | where: "slug", "marco-gaetani" | first %}
   {% if head %}
   <div class="people-grid">
@@ -41,7 +41,7 @@ permalink: /people/
 </div>
 
 <div class="prose-block page-section">
-  <h2>Team Members</h2>
+  <h2>Team members</h2>
   <div class="people-grid">
     {% assign all_members = site.people | where_exp: "person", "person.slug != 'marco-gaetani'" | sort: "name" %}
     {% for person in all_members %}
@@ -77,7 +77,7 @@ permalink: /people/
 </div>
 
 <div class="prose-block page-section">
-  <h2>Former Members</h2>
+  <h2>Former members</h2>
   <ul class="plain-list former-list">
     {% for person in site.lab.people.former_members %}
     <li>

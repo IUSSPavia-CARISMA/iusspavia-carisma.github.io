@@ -5,7 +5,7 @@ permalink: /research/
 ---
 
 <div class="prose-block page-section">
-  <h2>Main Research Activities</h2>
+  <h2>Main research activities</h2>
   <ul class="plain-list">
     {% for item in site.lab.overview.activities %}
     <li>{{ item }}</li>
@@ -14,7 +14,7 @@ permalink: /research/
 </div>
 
 <div class="prose-block page-section">
-  <h2>Research Areas</h2>
+  <h2>Research areas</h2>
   <div class="editorial-sections">
     {% for area in site.lab.activity_sections %}
     <article class="editorial-item">
@@ -28,7 +28,7 @@ permalink: /research/
 </div>
 
 <div class="prose-block page-section">
-  <h2>Research Projects</h2>
+  <h2>Research projects</h2>
   <ul class="project-list project-list-grid">
     {% assign sorted_projects = site.research | where: "project", true | sort: "title" %}
     {% for item in sorted_projects %}

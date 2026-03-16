@@ -20,7 +20,7 @@ permalink: /resources/
 
 <div class="prose-block page-section">
   <h2>Data and supporting material</h2>
-  <p>Alongside codes and software, we provide supporting material for project dissemination and collaboration.</p>
+  <p>Alongside codes and softwares, we provide supporting material for project dissemination and collaboration.</p>
   <ul class="plain-list">
     <li>Project and lab documentation resources</li>
     <li>Guides and directions for visitors (when available)</li>
