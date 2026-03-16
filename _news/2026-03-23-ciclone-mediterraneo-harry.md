@@ -4,9 +4,7 @@ date: 2026-03-23
 author: "IUSS Pavia"
 ---
 
-Un incontro aperto al pubblico per discutere delle calamità climatiche che colpiscono l'Italia, dai cicloni mediterranei ai rischi idrogeologici.
-
-L'evento esplorerà la fisica dei cicloni mediterranei attraverso la lente del cambiamento ambientale e della vulnerabilità territoriale.
+Un incontro aperto al pubblico per discutere delle calamità climatiche che colpiscono l'Italia, dai cicloni mediterranei ai rischi idrogeologici. L'evento esplorerà la fisica dei cicloni mediterranei attraverso la lente del cambiamento ambientale e della vulnerabilità territoriale.
 
 <br>
 <br>
@@ -56,7 +54,7 @@ L'evento esplorerà la fisica dei cicloni mediterranei attraverso la lente del c
 
 <br>
 
-Ingresso libero con registrazione consigliata. L'evento vale come attività extra-curricolare per gli studenti IUSS.
+Ingresso libero con registrazione consigliata. L'evento si terrà in italiano.
 
 <br>
 <br>

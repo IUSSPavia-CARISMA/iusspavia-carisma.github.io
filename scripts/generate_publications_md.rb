@@ -27,13 +27,56 @@ def first_author_surname(authors)
 end
 
 
-def bold_surname(citation, surname)
-  text = citation.to_s.dup
-  key = normalize_space(surname)
-  return normalize_space(text) if key.empty?
+def extract_surname(full_name)
+  name = normalize_space(full_name)
+  return '' if name.empty?
 
-  pattern = /(?<!\p{L})(#{Regexp.escape(key)})(?!\p{L})/i
-  normalize_space(text.gsub(pattern) { |m| "**#{m}**" })
+  # Handle "Surname, Initials" format (e.g., "Dal Monte, T.", "Nobile, E.")
+  if name.include?(',')
+    surname = name.split(',').first.to_s.strip
+    return surname unless surname.empty?
+  end
+
+  # Handle "Initials Surname" format (e.g., "M. Gaetani", "L.T. Massano")
+  # Reject initials: single letters (M, E) or compound initials (L.T., M.L.V.)
+  parts = name.split(/\s+/).reject { |p| p.match?(/\A([A-Z]\.)+\z/i) || p.match?(/\A[A-Z]\z/i) }
+  parts.last.to_s.strip
+end
+
+
+def bold_surnames(citation, carisma_authors)
+  text = citation.to_s.dup
+
+  carisma_authors.each do |author|
+    surname = extract_surname(author)
+    next if surname.empty?
+
+    # Skip if already bolded
+    next if text.match?(/\*\*[^*]*#{Regexp.escape(surname)}[^*]*\*\*/i)
+
+    # Match full author name patterns - order matters!
+    patterns = [
+      # "Surname, I." or "Surname, I.J." - initials with periods after comma
+      /(?<![*\p{L}])(#{Regexp.escape(surname)},\s*[A-Z]\.(?:[A-Z]\.)*)(?=\s*[,:&]|\s+and\s|\s*$)/i,
+      # "Surname I." or "Surname I.J." - initials with periods, space separated
+      /(?<![*\p{L}])(#{Regexp.escape(surname)}\s+[A-Z]\.(?:[A-Z]\.)*)(?=\s*[,:]|\s+and\s|\s*$)/i,
+      # "Surname I" or "Surname IJ" - initials WITHOUT periods (e.g., "Chericoni M")
+      /(?<![*\p{L}])(#{Regexp.escape(surname)}\s+[A-Z](?:\.[A-Z])*)(?=\s*[,:]|\s+and\s|\s*$)/i,
+      # "I. Surname" or "I.J. Surname" - initials before surname
+      /(?<![*\p{L}])((?:[A-Z]\.\s*)+#{Regexp.escape(surname)})(?![*\p{L}])/i,
+      # Just surname as fallback
+      /(?<![*\p{L}])(#{Regexp.escape(surname)})(?![*\p{L}])/i
+    ]
+
+    patterns.each do |pattern|
+      if text.match?(pattern)
+        text = text.sub(pattern) { |m| "**#{m}**" }
+        break
+      end
+    end
+  end
+
+  normalize_space(text)
 end
 
 
@@ -75,12 +118,23 @@ headers = sheet.row(1).map { |h| h.to_s.strip.downcase }
   row_data = sheet.row(i)
   row = headers.each_with_index.to_h { |header, idx| [header, row_data[idx]] }
 
-  carisma = value_for(row, ['carisma', 'author surname'])
-  authors = value_for(row, ['authors', 'author'])
+  # Collect all CARISMA authors from the relevant columns
+  carisma_authors = [
+    value_for(row, ['carisma 1st author']),
+    value_for(row, ['carisma other authors (1)']),
+    value_for(row, ['carisma other authors (2)']),
+    value_for(row, ['carisma other authors (3)'])
+  ].reject(&:empty?)
+
+  authors = value_for(row, ['authors'])
   title = value_for(row, ['title'])
   journal = value_for(row, ['journal'])
   year = value_for(row, ['year'])
   doi = value_for(row, ['doi'])
+
+  # Filter to only 2024-2025 publications
+  year_int = year.to_s.to_i
+  next unless year_int >= 2024 && year_int <= 2025
 
   citation = build_citation(
     authors: authors,
@@ -92,7 +146,7 @@ headers = sheet.row(1).map { |h| h.to_s.strip.downcase }
   next if citation.empty?
 
   rows << {
-    citation: bold_surname(citation, carisma),
+    citation: bold_surnames(citation, carisma_authors),
     first_author: first_author_surname(authors)
   }
 end
@@ -113,7 +167,7 @@ output << "permalink: /publications/\n"
 output << "---\n\n"
 output << "<div class=\"prose-block page-section\">\n"
 output << "  <h2>Publications</h2>\n"
-output << "  <p>List of peer-review scientific articles published in 2025.</p>\n\n"
+output << "  <p>List of peer-reviewed scientific articles published in 2024-2025.</p>\n\n"
 
 if rows.empty?
   output << "  <p>No publications found.</p>\n"

@@ -35,7 +35,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>Università della Tuscia, Viterbo</em>
 </div>
 
-[Register](https://forms.gle/tC24Mzarp3TWDxgF9)
+<a href="https://forms.gle/tC24Mzarp3TWDxgF9" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 
@@ -52,7 +52,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>Helmholtz Centre for Environmental Research UFZ, Leipzig</em>
 </div>
 
-[Register](https://forms.gle/NxsiBrh4zq4Ph95j8)
+<a href="https://forms.gle/NxsiBrh4zq4Ph95j8" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 
@@ -69,7 +69,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>Università di Torino</em>
 </div>
 
-[Register](https://forms.gle/knTmzBDeBWeSgyUn8)
+<a href="https://forms.gle/knTmzBDeBWeSgyUn8" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 
@@ -86,7 +86,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>ETH Zurich</em>
 </div>
 
-[Register](https://forms.gle/5TCn96wPYoq7WCRN7)
+<a href="https://forms.gle/5TCn96wPYoq7WCRN7" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 
@@ -103,7 +103,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>Istituto di Scienze dell'Atmosfera e del Clima CNR, Lecce</em>
 </div>
 
-[Register](https://forms.gle/8C2wQiGUZdhV3zE49)
+<a href="https://forms.gle/8C2wQiGUZdhV3zE49" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 
@@ -120,7 +120,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>Agenzia ItaliaMeteo</em>
 </div>
 
-[Register](https://forms.gle/h17hgEicPNPX8kdP6)
+<a href="https://forms.gle/h17hgEicPNPX8kdP6" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 
@@ -137,7 +137,7 @@ The series offers an overview of the scientific tools available to citizens, sta
 <em>Istituto di Scienze dell'Atmosfera e del Clima CNR, Bologna</em>
 </div>
 
-[Register](https://forms.gle/FjSEYptiCbuucGtW6)
+<a href="https://forms.gle/FjSEYptiCbuucGtW6" class="register-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg><span>Register Now</span></a>
 
 <br>
 <br>
