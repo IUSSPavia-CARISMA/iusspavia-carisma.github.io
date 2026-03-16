@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'csv'
+require 'roo'
 require 'time'
 
-CSV_PATH = File.expand_path('../assets/carisma_pub.csv', __dir__)
+XLSX_PATH = File.expand_path('../assets/CARISMA_publications.xlsx', __dir__)
 OUTPUT_PATH = File.expand_path('../publications.md', __dir__)
 
 
@@ -67,13 +67,20 @@ end
 
 rows = []
 
-CSV.foreach(CSV_PATH, headers: true, col_sep: ';', encoding: 'bom|utf-8', liberal_parsing: true) do |row|
-  carisma = value_for(row, ['carisma', 'Author Surname'])
-  authors = value_for(row, ['authors', 'Authors'])
-  title = value_for(row, ['title', 'Title'])
-  journal = value_for(row, ['journal', 'Journal'])
-  year = value_for(row, ['year', 'Year'])
-  doi = value_for(row, ['doi', 'DOI'])
+xlsx = Roo::Spreadsheet.open(XLSX_PATH)
+sheet = xlsx.sheet(0)
+headers = sheet.row(1).map { |h| h.to_s.strip.downcase }
+
+(2..sheet.last_row).each do |i|
+  row_data = sheet.row(i)
+  row = headers.each_with_index.to_h { |header, idx| [header, row_data[idx]] }
+
+  carisma = value_for(row, ['carisma', 'author surname'])
+  authors = value_for(row, ['authors', 'author'])
+  title = value_for(row, ['title'])
+  journal = value_for(row, ['journal'])
+  year = value_for(row, ['year'])
+  doi = value_for(row, ['doi'])
 
   citation = build_citation(
     authors: authors,
@@ -92,23 +99,33 @@ end
 
 rows.sort_by! { |r| r[:first_author] }
 
+
+def markdown_to_html(text)
+  text.gsub(/\*\*(.+?)\*\*/, '<strong>\1</strong>')
+      .gsub(/\[([^\]]+)\]\(([^)]+)\)/, '<a href="\2">\1</a>')
+end
+
+
 output = +"---\n"
 output << "layout: page\n"
 output << "title: Publications\n"
 output << "permalink: /publications/\n"
 output << "---\n\n"
-output << "<div class=\"prose-block\">\n"
+output << "<div class=\"prose-block page-section\">\n"
 output << "  <h2>Publications</h2>\n"
-output << "  <p>List of peer-review scientific articles published in 2025.</p>\n"
-output << "</div>\n\n"
+output << "  <p>List of peer-review scientific articles published in 2025.</p>\n\n"
 
 if rows.empty?
-  output << "No publications found in `assets/carisma_pub.csv`.\n"
+  output << "  <p>No publications found.</p>\n"
 else
+  output << "  <ul class=\"plain-list\">\n"
   rows.each do |entry|
-    output << "- #{entry[:citation]}\n"
+    output << "    <li>#{markdown_to_html(entry[:citation])}</li>\n"
   end
+  output << "  </ul>\n"
 end
+
+output << "</div>\n"
 
 File.write(OUTPUT_PATH, output)
 puts "Wrote #{OUTPUT_PATH} (#{rows.length} entries)"

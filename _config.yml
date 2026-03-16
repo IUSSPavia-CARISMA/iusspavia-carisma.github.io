@@ -9,7 +9,7 @@ description: "Climate change impact studies for risk management at IUSS Pavia."
 url: "https://iusspavia-carisma.github.io"
 baseurl: "" # use empty string when deploying from iusspavia-carisma.github.io repository
 seo:
-  title: "CARISMA | IUSS Pavia (Italy)"
+  title: "CARISMA | IUSS Pavia"
   description: "Research group on climate change impact studies for risk management based at IUSS Pavia in Italy"
 
 # Hero Slider (homepage)
@@ -66,6 +66,8 @@ lab:
     former_members:
       - name: "Angela Modica Scala, PhD"
         orcid: ""
+      - name: "Chiara De Bernardi, PhD"
+        orcid: ""
       - name: "Fatemeh Mojtahedi, PhD"
         orcid: ""
       - name: "Giulia Sturlese, MSc"
@@ -93,16 +95,21 @@ lab:
       - name: "Wazita Scott, PhD"
         orcid: ""
   recent_publications:
-    - authors: "Nobile, E. G. L., Figueiredo, R., Arrighi, C., Romao, X., and Martina, M. L. V"
-      title: "Flood risk assessment of cultural heritage across countries and spatial scales"
-      journal: "International Journal of Disaster Risk Reduction"
+    - authors: "Vohnicky P., E. Dallan, F. Marra, G. Fosser, M. Borga"
+      title: "Future precipitation extremes: differential changes from point to catchment scale revealed by a convection-permitting model ensemble"
+      journal: "Journal of Hydrology"
       year: 2025
-      doi: "https://doi.org/10.1016/j.ijdrr.2025.105236"
-    - authors: "White, C. J., Adnan, M. S. G., Arosio, M., Buller, S., Cha, Y., Ciurean, R., Crummy, J. M., Duncan, M., Gill, J., Kennedy, C., Nobile, E., Smale, L., and Ward, P. J."
-      title: "Review article: Towards multi-hazard and multi-risk indicators – a review and recommendations for development and implementation"
-      journal: "Nat. Hazards Earth Syst. Sci."
+      doi: "https://doi.org/10.1016/j.jhydrol.2025.133822"
+    - authors: "Formenti, P., Giorio, C., Desboeufs, K., Zherebker, A., Gaetani, M., et al."
+      title: Elemental composition, iron mineralogy, and solubility of anthropogenic and natural mineral dust aerosols in Namibia: a case study analysis from the AEROCLO-sA campaign – Part 2"
+      journal: "Atmospheric Chemistry and Physics"
       year: 2025
-      doi: "https://doi.org/10.5194/nhess-25-4263-2025"
+      doi: "https://doi.org/10.5194/acp-25-16127-2025"
+    - authors: "Correa-Sánchez N., X.G. Larsén, G. Fosser, E. Dallan, M. Borga, F. Marra"
+      title: "Brief communication: Enhanced representation of the power spectra of wind speed in Convection-Permitting Models"
+      journal: "Wind Energy Science"
+      year: 2025
+      doi: "https://doi.org/10.5194/wes-10-2551-2025"
   collaborations:
     national:
       - "Comune di Milano"
