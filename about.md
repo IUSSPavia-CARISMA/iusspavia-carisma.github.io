@@ -11,24 +11,24 @@ permalink: /about/
   <h2>Our history</h2>
   <div class="two-column-grid">
     <div>
-      <p><strong>{{ site.lab.full_name }} ({{ site.lab.name }})</strong> was founded in {{ site.lab.founded }} at {{ site.lab.university }} and is led by {{ site.lab.head }}.</p>
-      <p>The origins of CARISMA lie in research activities developed at IUSS Pavia within the ROSE School, originally focused on earthquake risk assessment. Over time, the research scope progressively expanded to include flood risk with HYRIS (hydrogeological risks) curriculum and, more broadly, the impacts of climate change on natural hazards. The integration of these research lines between 2014 and 2018 led to the creation of a dedicated research group in 2019, initially named CLIMAX. As the group expanded, its activities evolved towards a unified framework aimed at understanding and managing extreme events and climate related risks. This process ultimately resulted in the establishment of CARISMA, which brings together expertise in engineering, physics, and economics to advance research on climate related risks and to support evidence based risk management strategies.</p> 
+      <p><strong>{{ site.lab.full_name }} ({{ site.lab.name }})</strong> Research Centre was founded in {{ site.lab.founded }} at {{ site.lab.university }} and is led by {{ site.lab.head }}.</p>
+      <p>The origins of CARISMA lie in research activities developed at IUSS Pavia within the ROSE School, originally focused on earthquake risk assessment. Over time, the research scope progressively expanded to include initially hydrogeological risks and later, the impacts of climate change on natural hazards. The integration of these research lines between 2014 and 2018 led to the creation of a dedicated research group in 2019, initially named CLIMAX. As the group expanded, its activities evolved towards a unified framework aimed at understanding and managing extreme events and climate related risks. This process ultimately resulted in the establishment of CARISMA, which brings together expertise in engineering, physics, and economics to advance research on climate related risks and to support evidence based risk management strategies.</p> 
       <p>The group currently consists of 31 members.</p>
     </div>
     <div class="history-images">
       <figure class="history-image-card">
         <img src="{{ '/assets/img/carisma_2019.jpeg' | relative_url }}" alt="CARISMA team 2019">
-        <figcaption>CARISMA team - 2019</figcaption>
+        <figcaption>First CARISMA members (2019)</figcaption>
       </figure>
       <figure class="history-image-card">
         <img src="{{ '/assets/img/carisma_2022.jpeg' | relative_url }}" alt="CARISMA team 2022">
-        <figcaption>CARISMA team - 2022</figcaption>
+        <figcaption>Some of CARISMA members (2022)</figcaption>
       </figure>
     </div>
   </div>
   <figure class="history-image-featured history-image-card">
-    <img src="{{ '/assets/img/carisma_2026.png' | relative_url }}" alt="CARISMA team 2026">
-    <figcaption>CARISMA team - 2026</figcaption>
+    <img src="{{ '/assets/img/carisma_2026.jpeg' | relative_url }}" alt="CARISMA team 2026">
+    <figcaption>Some of CARISMA members (2026)</figcaption>
   </figure>
 </div>
 

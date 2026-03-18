@@ -9,7 +9,7 @@ email: "elisa.nobile@iusspavia.it"
 researchgate: "https://www.researchgate.net/profile/Elisa-Nobile"
 orcid: "https://orcid.org/0009-0005-2665-8710"
 linkedin: "https://www.linkedin.com/in/elisagrazialucianobile/"
-photo: "assets/img/people/elisa-nobile-portrait.jpeg"
+photo: "assets/img/people/elisa-nobile.jpeg"
 ---
 
 Elisa Nobile is a PhD candidate in the Sustainable Development and Climate Change (PhD SDC) program in IUSS Pavia. Her research focuses on the indirect and cascading impacts of floods on economic systems, with a special interest in how infrastructure disruptions affect supply chains. Her goal is to develop risk assessment tools that capture both direct and indirect impacts to support more resilient systems and to support investments strategies.

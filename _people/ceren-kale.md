@@ -9,7 +9,7 @@ email: "ceren.kale@iusspavia.it"
 researchgate: ""
 orcid: ""
 linkedin: ""
-photo: ""
+photo: "assets/img/people/ceren-kale.jpeg"
 ---
 
 Profile details for Ceren Kale can be updated here.

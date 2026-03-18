@@ -8,7 +8,7 @@ phd_program: "PhD programme details can be updated here."
 email: "ahmed.durrani@iusspavia.it"
 researchgate: ""
 linkedin: ""
-photo: ""
+photo: "assets/img/people/owais-durrani.jpeg"
 ---
 
 Profile details for Owais Ahmed Durrani can be updated here.

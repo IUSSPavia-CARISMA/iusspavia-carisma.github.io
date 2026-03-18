@@ -9,7 +9,7 @@ email: "fiza.noor@iusspavia.it"
 researchgate: ""
 orcid: ""
 linkedin: ""
-photo: ""
+photo: "assets/img/people/fiza-noor.jpeg"
 ---
 
 Profile details for Fiza Noor can be updated here.

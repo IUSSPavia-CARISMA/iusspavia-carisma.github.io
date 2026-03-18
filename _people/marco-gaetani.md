@@ -10,7 +10,7 @@ linkedin: ""
 orcid: "https://orcid.org/0000-0003-2923-6773"
 iuss_page: "https://www.iusspavia.it/en/contacts/marco-gaetani"
 iuss_research: "https://research.iusspavia.it/simple-search?query=gaetani"
-photo: ""
+photo: "assets/img/people/marco-gaetani.jpeg"
 ---
 
 Marco Gaetani is Associate Professor in Physics of the Earth System at the IUSS School for Advanced Studies in Pavia since 2022, where he teaches Climate Dynamics and Change to undergraduate and PhD students, and is head of the research centre Climate change impAct studies for RISk MAnagement (CARISMA). 

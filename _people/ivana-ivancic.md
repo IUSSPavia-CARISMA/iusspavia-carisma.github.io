@@ -9,7 +9,7 @@ email: "ivana.ivancic@iusspavia.it"
 researchgate: ""
 orcid: ""
 linkedin: ""
-photo: ""
+photo: "assets/img/people/ivana-ivancic.jpeg"
 ---
 
 Profile details for Ivana Ivančić can be updated here.

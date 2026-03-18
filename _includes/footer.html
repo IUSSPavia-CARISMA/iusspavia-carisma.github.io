@@ -4,6 +4,12 @@
       <h3 class="footer-title">{{ site.lab.name }}</h3>
       <p class="footer-desc">{{ site.lab.university }}</p>
     </div>
+    <div class="footer-logos">
+      <a href="{{ site.lab.iuss_pavia.href }}" target="_blank" rel="noreferrer">
+        <img class="footer-logo logo-light" src="{{ '/assets/img/iuss_logo.png' | relative_url }}" alt="IUSS Logo">
+        <img class="footer-logo logo-dark" src="{{ '/assets/img/iuss_logo_negativo.png' | relative_url }}" alt="IUSS Logo">
+      </a>
+    </div>
     <!-- <div class="footer-contact">
       <h4>Contact</h4>
       <p><a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></p>

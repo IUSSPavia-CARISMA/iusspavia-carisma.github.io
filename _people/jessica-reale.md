@@ -8,7 +8,7 @@ email: "jessica.reale@iusspavia.it"
 researchgate: ""
 orcid: ""
 linkedin: ""
-photo: ""
+photo: "assets/img/people/jessica-reale.jpeg"
 ---
 
 Profile details for Jessica Reale can be updated here.

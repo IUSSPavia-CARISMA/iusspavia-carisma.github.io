@@ -8,7 +8,7 @@ phd_program: "PhD programme details can be updated here."
 email: "muhammad.imam@iusspavia.it"
 researchgate: ""
 linkedin: ""
-photo: ""
+photo: "assets/img/people/muhammad-imam.jpeg"
 ---
 
 Profile details for Muhammad Nasir Imam can be updated here.

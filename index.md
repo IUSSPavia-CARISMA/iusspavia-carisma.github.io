@@ -10,7 +10,7 @@ title: CARISMA
     <div class="centre-hero-main">
       <h1 class="centre-title">{{ site.lab.full_name }}</h1>
       <p class="centre-acronym">{{ site.lab.name }}</p>
-      <p class="centre-summary">{{ site.lab.tagline }}</p>
+      <p class="centre-summary">Research centre on climate change, impacts and risk management at <a href="{{ site.lab.iuss_pavia.href }}" target="_blank" rel="noreferrer">{{ site.lab.iuss_pavia.name }}</a></p>
     </div>
   </div>
 </section>
