@@ -11,4 +11,4 @@ linkedin: ""
 photo: "assets/img/people/victor-ongera.jpeg"
 ---
 
-Profile details for Victor Nyabuti Ong'era can be updated here.
+Maybe gay
