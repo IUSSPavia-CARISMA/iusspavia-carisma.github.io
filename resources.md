@@ -5,8 +5,14 @@ permalink: /resources/
 ---
 
 <div class="prose-block page-section">
-  <h2>Resources</h2>
   <p>CARISMA promotes open science through shared code, reproducible workflows, and transparent documentation. This page collects the main resources available to collaborators, students, and external users.</p>
+</div>
+<div class="prose-block page-section">
+  <h2>Cluster guide</h2>
+  <p>For practical shell usage, Slurm job patterns, and the browser-based <code>sbatch</code> builder, see the CARISMA HPC cluster guide.</p>
+  <ul class="plain-list">
+    <li><a href="https://iusspavia-carisma.github.io/IUSS-HPC-CLUSTER/" target="_blank" rel="noreferrer">IUSS HPC Cluster Reference</a></li>
+  </ul>
 </div>
 
 <div class="prose-block page-section">
@@ -27,3 +33,5 @@ permalink: /resources/
     <li>Selected datasets and references linked from project pages</li>
   </ul>
 </div>
+
+
