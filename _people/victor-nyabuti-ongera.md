@@ -7,7 +7,7 @@ group: "PhD Student"
 phd_program: "Sustainable Development and Climate Change"
 email: "victor.ongera@iusspavia.it"
 orcid: "https://orcid.org/0000-0002-6603-0718"
-website: "https://ongevic.github.io/victor-ongera-hub/"
+website: "https://ongevic.github.io/research/"
 linkedin: "https://www.linkedin.com/in/victor-nyabuti-ongera-156394114/"
 photo: "assets/img/people/victor-ongera.jpeg"
 ---
