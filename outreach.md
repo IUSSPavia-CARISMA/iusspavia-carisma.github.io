@@ -14,6 +14,7 @@ permalink: /outreach/
   <div class="education-course-grid">
     <div class="education-course-card">
       <h4>Wind Science &amp; Hazard (WISH-A): Understanding the wind &amp; predicting risk</h4>
+      <a class="education-card-cta" style="text-decoration: none;" href="{{ '/outreach/storm-chasers/' | relative_url }}">&#9889; Play the Storm Chasers game</a>
     </div>
     <div class="education-course-card">
       <h4>Cambiamento climatico: una sfida scientifica, tecnologica e sociale</h4>

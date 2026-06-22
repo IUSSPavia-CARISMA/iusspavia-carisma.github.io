@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storm Chasers — IUSS Pavia / CARISMA</title>
+  <meta name="description" content="Storm Chasers: build the storm, protect the landmark, outlast your rivals. A meteorology game for the IUSS Pavia orientation day." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated sky background, lives behind every screen -->
+  <div class="sky" aria-hidden="true">
+    <div class="cloud cloud-a"></div>
+    <div class="cloud cloud-b"></div>
+    <div class="cloud cloud-c"></div>
+    <div class="rain"></div>
+    <div class="bolt" id="skyBolt"></div>
+  </div>
+
+  <!-- Top-right utility bar, always available -->
+  <div class="utility-bar">
+    <button id="muteBtn" class="util-btn" title="Toggle thunder sound" aria-label="Toggle sound">🔊</button>
+    <button id="resetBtn" class="util-btn hidden" title="Reset game">⟲ Reset</button>
+  </div>
+
+  <!-- ===================== SCREEN 1: LANDING ===================== -->
+  <section id="screen-landing" class="screen active">
+    <div class="landing-hero">
+      <div class="storm-emblem" aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="emblem-svg">
+          <defs>
+            <radialGradient id="cloudGrad" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#6b7a99"/>
+              <stop offset="100%" stop-color="#2a3252"/>
+            </radialGradient>
+          </defs>
+          <g class="emblem-cloud">
+            <ellipse cx="80" cy="80" rx="48" ry="34" fill="url(#cloudGrad)"/>
+            <ellipse cx="120" cy="74" rx="42" ry="30" fill="url(#cloudGrad)"/>
+            <ellipse cx="100" cy="96" rx="58" ry="30" fill="url(#cloudGrad)"/>
+          </g>
+          <path class="emblem-bolt" d="M104 96 L84 140 L100 140 L86 184 L128 128 L108 128 L124 96 Z"
+                fill="#ffe14d" stroke="#fff7c2" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1 class="title">Storm&nbsp;Chasers</h1>
+      <p class="tagline">Build the storm. Protect the landmark. Outlast your rivals.</p>
+      <button id="startBtn" class="btn btn-primary btn-huge">Start ⚡</button>
+
+      <details class="howto">
+        <summary>How to play</summary>
+        <div class="howto-body">
+          <p>A severe storm needs <strong>four ingredients at once</strong>: Wind Shear, Moisture, Instability, and Lift. Teams race to collect them and land the finishing storm on a famous Italian landmark.</p>
+          <ol>
+            <li><strong>On your turn</strong> your team answers a quiz question. Correct → you <strong>draw a card</strong>. Incorrect → no card, turn passes.</li>
+            <li><strong>Cards</strong> are either storm ingredients or protection. Collect a full set of ingredients to launch a storm.</li>
+            <li><strong>Choose an action:</strong> Launch a storm, play Protection on the landmark, or Hold.</li>
+            <li><strong>Mild storm</strong> (1 of each ingredient) deals <strong>6 damage</strong>. <strong>Severe storm</strong> (2 of each) deals <strong>12 damage</strong>.</li>
+            <li><strong>Protection</strong> is temporary — a shield absorbs the next storm, then is gone. Each protection card soaks up 3 damage.</li>
+            <li>Every storm chips through: it always deals at least <strong>2 damage</strong>, no matter the shields.</li>
+            <li><strong>Winning:</strong> the team whose storm drops the landmark's health to 0 wins. If it survives all 6 rounds, the team that dealt the most total damage wins.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+    <footer class="footer">IUSS Pavia · CARISMA — SOE 2026</footer>
+  </section>
+
+  <!-- ===================== SCREEN 2: SETUP ===================== -->
+  <section id="screen-setup" class="screen">
+    <div class="panel setup-panel">
+      <h2 class="screen-heading">Game setup</h2>
+
+      <div class="setup-block">
+        <label class="setup-label">How many teams?</label>
+        <div id="teamCountChoices" class="choice-row" role="radiogroup" aria-label="Number of teams"></div>
+      </div>
+
+      <div class="setup-block">
+        <label class="setup-label">Team names <span class="label-opt">(optional — leave blank to keep Team A, B, …)</span></label>
+        <div id="teamNames" class="team-names"></div>
+      </div>
+
+      <div class="setup-block">
+        <label class="setup-label">Target landmark</label>
+        <div id="landmarkChoices" class="landmark-grid" role="radiogroup" aria-label="Target landmark"></div>
+      </div>
+
+      <div class="setup-actions">
+        <button id="backToLandingBtn" class="btn btn-ghost">← Back</button>
+        <button id="beginBtn" class="btn btn-primary">Begin game ⚡</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 3: GAME BOARD ===================== -->
+  <section id="screen-game" class="screen">
+    <div class="board">
+
+      <!-- LEFT: landmark + health -->
+      <div class="board-main">
+        <div class="round-pill" id="roundPill">Round 1 of 6</div>
+        <div class="landmark-stage">
+          <div class="landmark-art" id="landmarkArt"></div>
+          <div class="shield-aura" id="shieldAura" aria-hidden="true"></div>
+          <div class="impact" id="impact" aria-hidden="true"></div>
+        </div>
+        <h2 class="landmark-name" id="landmarkName">Landmark</h2>
+
+        <div class="health-wrap">
+          <div class="health-row">
+            <span class="health-label">Health</span>
+            <span class="health-num"><span id="healthNum">20</span> / 20</span>
+          </div>
+          <div class="health-bar">
+            <div class="health-fill" id="healthFill"></div>
+          </div>
+          <div class="shield-row" id="shieldRow">
+            <span class="shield-chip" id="shieldChip">🛡️ Shield: 0 — no protection</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: turn control + teams -->
+      <div class="board-side">
+        <div class="turn-card">
+          <div class="turn-now" id="turnNow">Team A's turn</div>
+          <button id="answerBtn" class="btn btn-primary btn-block">Answer question</button>
+          <div class="turn-status" id="turnStatus">Press to read this team a question.</div>
+        </div>
+        <div class="teams-list" id="teamsList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 4: END ===================== -->
+  <section id="screen-end" class="screen">
+    <div class="panel end-panel">
+      <div class="trophy" aria-hidden="true">🏆</div>
+      <h2 class="end-headline" id="endHeadline">Team A wins!</h2>
+      <p class="end-sub" id="endSub"></p>
+      <div class="end-stats" id="endStats"></div>
+      <button id="playAgainBtn" class="btn btn-primary btn-huge">Play again ⚡</button>
+    </div>
+  </section>
+
+  <!-- ===================== MODAL: QUESTION ===================== -->
+  <div id="questionModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="qText">
+      <div class="modal-team" id="modalTeam">Team A</div>
+      <div class="modal-kicker">Quiz question</div>
+      <p class="modal-question" id="qText">…</p>
+      <details class="answer-reveal">
+        <summary>Show answer</summary>
+        <p id="qAnswer">…</p>
+      </details>
+      <div class="modal-actions">
+        <button id="markWrongBtn" class="btn btn-wrong">✗ Incorrect</button>
+        <button id="markRightBtn" class="btn btn-right">✓ Correct</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: CARD DRAW ===================== -->
+  <div id="cardModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal card-modal">
+      <div class="modal-kicker" id="cardModalKicker">You drew…</div>
+      <div class="draw-card" id="drawCard">
+        <div class="draw-card-inner">
+          <div class="draw-card-back"><span>⚡</span></div>
+          <div class="draw-card-front" id="drawCardFront"></div>
+        </div>
+      </div>
+      <button id="cardContinueBtn" class="btn btn-primary">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: ACTION PANEL ===================== -->
+  <div id="actionModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal action-modal">
+      <div class="modal-team" id="actionTeam">Team A</div>
+      <div class="modal-kicker">Choose your action</div>
+      <div class="action-hand" id="actionHand"></div>
+      <div class="action-buttons">
+        <button id="launchMildBtn" class="action-opt action-attack">
+          <span class="action-opt-title">🌩️ Mild storm</span>
+          <span class="action-opt-desc">1 of each ingredient → 6 damage</span>
+        </button>
+        <button id="launchSevereBtn" class="action-opt action-attack-severe">
+          <span class="action-opt-title">⛈️ Severe storm</span>
+          <span class="action-opt-desc">2 of each ingredient → 12 damage</span>
+        </button>
+        <button id="protectBtn" class="action-opt action-protect">
+          <span class="action-opt-title">🛡️ Play protection</span>
+          <span class="action-opt-desc">Shield the landmark (3 dmg each)</span>
+        </button>
+        <button id="holdBtn" class="action-opt action-hold">
+          <span class="action-opt-title">✋ Hold</span>
+          <span class="action-opt-desc">Do nothing, pass the turn</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: PICK PROTECTION ===================== -->
+  <div id="protectModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal protect-modal">
+      <div class="modal-kicker">Select protection card(s) to place</div>
+      <div class="protect-pick" id="protectPick"></div>
+      <div class="modal-actions">
+        <button id="protectCancelBtn" class="btn btn-ghost">← Back</button>
+        <button id="protectConfirmBtn" class="btn btn-primary">Place shield 🛡️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast for transient feedback -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="questions.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
