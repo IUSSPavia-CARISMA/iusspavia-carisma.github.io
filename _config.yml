@@ -175,6 +175,8 @@ navigation:
     url: "/publications/"
   - title: "Education"
     url: "/education/"
+  - title: "Outreach"
+    url: "/outreach/"
   - title: "Resources"
     url: "/resources/"
   - title: "News"
