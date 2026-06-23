@@ -744,17 +744,11 @@ function bind() {
 async function init() {
   bind();
   await loadQuestions();
-  const saved = loadSaved();
-  if (saved) {
-    state = saved;
-    setup.teamCount = state.teams.length;
-    setup.landmark = state.landmark;
-    renderBoard();
-    showScreen('screen-game');
-    toast('Resumed your game in progress.');
-  } else {
-    showScreen('screen-landing');
-  }
+  // Every page load starts clean: a refresh is a reset, never a silent resume
+  // of a previous game's cards. The in-game Reset button does the same.
+  clearSave();
+  state = null;
+  showScreen('screen-landing');
 }
 
 document.addEventListener('DOMContentLoaded', init);
