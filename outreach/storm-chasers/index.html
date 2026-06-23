@@ -53,14 +53,14 @@
       <details class="howto">
         <summary>How to play</summary>
         <div class="howto-body">
-          <p>A severe storm needs <strong>four ingredients at once</strong>: Wind Shear, Moisture, Instability, and Lift. Teams race to collect them and land the finishing storm on a famous Italian landmark.</p>
+          <p>A severe storm needs <strong>four ingredients at once</strong>: Wind Shear, Moisture, Instability, and Lift. All teams attack one shared landmark (20 health) — its health only ever goes down.</p>
           <ol>
-            <li><strong>On your turn</strong> your team answers a quiz question. Correct → you <strong>draw a card</strong>. Incorrect → no card, turn passes.</li>
-            <li><strong>Cards</strong> are either storm ingredients or protection. Collect a full set of ingredients to launch a storm.</li>
-            <li><strong>Choose an action:</strong> Launch a storm, play Protection on the landmark, or Hold.</li>
-            <li><strong>Mild storm</strong> (1 of each ingredient) deals <strong>6 damage</strong>. <strong>Severe storm</strong> (2 of each) deals <strong>12 damage</strong>.</li>
-            <li><strong>Protection</strong> is temporary — a shield absorbs the next storm, then is gone. Each protection card soaks up 3 damage.</li>
-            <li>Every storm chips through: it always deals at least <strong>2 damage</strong>, no matter the shields.</li>
+            <li><strong>Each team starts</strong> with <strong>4 random cards</strong> in hand — either storm ingredients or protection.</li>
+            <li><strong>On your turn</strong> your team answers a quiz question. Correct → you <strong>draw a card</strong>. Incorrect → no card.</li>
+            <li><strong>Then act:</strong> launch a storm (if you hold the ingredients) or pass.</li>
+            <li><strong>Mild storm</strong> (1 of each ingredient) deals <strong>5 damage</strong>. <strong>Severe storm</strong> (2 of each) deals <strong>10 damage</strong>. Launching uses up those ingredient cards.</li>
+            <li><strong>Interception:</strong> when you attack, any <em>other</em> team holding a <strong>Protection</strong> card may intercept — it cuts the storm by <strong>3 damage</strong> and lets that team <strong>steal one random ingredient</strong> you just used. Only one team can intercept each storm.</li>
+            <li>A storm always deals at least <strong>1 damage</strong>, even if intercepted.</li>
             <li><strong>Winning:</strong> the team whose storm drops the landmark's health to 0 wins. If it survives all 6 rounds, the team that dealt the most total damage wins.</li>
           </ol>
         </div>
@@ -117,9 +117,6 @@
           </div>
           <div class="health-bar">
             <div class="health-fill" id="healthFill"></div>
-          </div>
-          <div class="shield-row" id="shieldRow">
-            <span class="shield-chip" id="shieldChip">🛡️ Shield: 0 — no protection</span>
           </div>
         </div>
       </div>
@@ -187,15 +184,11 @@
       <div class="action-buttons">
         <button id="launchMildBtn" class="action-opt action-attack">
           <span class="action-opt-title">🌩️ Mild storm</span>
-          <span class="action-opt-desc">1 of each ingredient → 6 damage</span>
+          <span class="action-opt-desc">1 of each ingredient → 5 damage</span>
         </button>
         <button id="launchSevereBtn" class="action-opt action-attack-severe">
           <span class="action-opt-title">⛈️ Severe storm</span>
-          <span class="action-opt-desc">2 of each ingredient → 12 damage</span>
-        </button>
-        <button id="protectBtn" class="action-opt action-protect">
-          <span class="action-opt-title">🛡️ Play protection</span>
-          <span class="action-opt-desc">Shield the landmark (3 dmg each)</span>
+          <span class="action-opt-desc">2 of each ingredient → 10 damage</span>
         </button>
         <button id="holdBtn" class="action-opt action-hold">
           <span class="action-opt-title">✋ Hold</span>
@@ -205,15 +198,14 @@
     </div>
   </div>
 
-  <!-- ===================== MODAL: PICK PROTECTION ===================== -->
-  <div id="protectModal" class="modal-overlay" aria-hidden="true">
-    <div class="modal protect-modal">
-      <div class="modal-kicker">Select protection card(s) to place</div>
-      <div class="protect-pick" id="protectPick"></div>
-      <div class="modal-actions">
-        <button id="protectCancelBtn" class="btn btn-ghost">← Back</button>
-        <button id="protectConfirmBtn" class="btn btn-primary">Place shield 🛡️</button>
-      </div>
+  <!-- ===================== MODAL: INTERCEPTION WINDOW ===================== -->
+  <div id="interceptModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal intercept-modal">
+      <div class="modal-kicker">⚡ Storm incoming — intercept?</div>
+      <p class="intercept-title" id="interceptTitle">Team A launches a storm</p>
+      <p class="intercept-sub">A defending team holding a Protection card may intercept: cut the damage and steal one ingredient used in this storm. Only one team can intercept.</p>
+      <div class="intercept-options" id="interceptOptions"></div>
+      <button id="noInterceptBtn" class="btn btn-primary btn-block">No interception — let it hit ⚡</button>
     </div>
   </div>
 

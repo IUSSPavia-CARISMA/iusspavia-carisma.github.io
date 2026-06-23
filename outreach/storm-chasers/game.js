@@ -15,19 +15,24 @@
 const CONFIG = {
   START_HEALTH: 20,        // landmark health at the start
   TOTAL_ROUNDS: 6,         // after this many rounds, the timer wins it
-  MILD_DAMAGE: 6,          // 1 of each ingredient (4 cards)
-  SEVERE_DAMAGE: 12,       // 2 of each ingredient (8 cards)
+  START_CARDS: 4,          // random cards each team is dealt at the start
+  MILD_DAMAGE: 5,          // 1 of each ingredient (4 cards)
+  SEVERE_DAMAGE: 10,       // 2 of each ingredient (8 cards)
   MILD_REQ: 1,             // ingredients of each type needed for a mild storm
   SEVERE_REQ: 2,           // ingredients of each type needed for a severe storm
-  SHIELD_PER_CARD: 3,      // damage absorbed by each protection card
-  MIN_CHIP_DAMAGE: 2,      // every storm always chips through at least this much
+
+  // Protection is REACTIVE: when a team attacks, any other team holding a
+  // protection card may intercept — cutting the damage and stealing an
+  // ingredient the attacker used. Only one team can intercept each storm.
+  PROTECT_REDUCTION: 3,    // damage an interception removes from the storm
+  MIN_DAMAGE: 1,           // a storm always deals at least this much
 
   // Weighted draw pool (draw WITH REPLACEMENT — the deck never runs dry).
-  // Each of the 4 ingredients is drawn 22% of the time (88% total). The even
+  // Each of the 4 ingredients is drawn ~21.25% of the time (85% total). The even
   // split is critical so no single ingredient becomes a bottleneck.
-  // Each of the 4 protection types is drawn 3% of the time (12% total).
-  INGREDIENT_SHARE: 0.88,   // → 0.22 per ingredient
-  PROTECTION_SHARE: 0.12,   // → 0.03 per protection type
+  // Each of the 4 protection types is drawn ~3.75% of the time (15% total).
+  INGREDIENT_SHARE: 0.85,   // → 0.2125 per ingredient
+  PROTECTION_SHARE: 0.15,   // → 0.0375 per protection type
 };
 
 /* The four storm ingredients. `tip` explains the real meteorological role. */
@@ -42,7 +47,7 @@ const INGREDIENTS = [
     tip: 'The trigger: a front, a mountain or a sea breeze that gives the air its first nudge upward to start convection.' },
 ];
 
-/* The four protection types. Each card absorbs CONFIG.SHIELD_PER_CARD damage. */
+/* The four protection types. Used reactively to intercept an attacker's storm. */
 const PROTECTIONS = [
   { type: 'doppler',   name: 'Doppler Radar',      icon: '📡', note: 'Tracks the storm in real time so warnings go out early.' },
   { type: 'shelter',   name: 'Tornado Shelter',    icon: '🏚️', note: 'Keeps people safe while the storm passes over.' },
@@ -108,7 +113,6 @@ const TEAM_COLORS = ['#ffd24d', '#5ad1ff', '#ff7eb6', '#9be86a', '#c79bff'];
 let state = null;          // the live game state (see newGame)
 let setup = { teamCount: 4, landmark: 'pisa', names: [] };
 let questionQueue = [];     // shuffled queue of question indices
-let pendingProtection = []; // protection cards selected in the protect modal
 let muted = false;
 
 /* ===========================================================================
@@ -288,7 +292,6 @@ function newGame(teamCount, landmarkKey, names) {
     maxHealth: CONFIG.START_HEALTH,
     round: 1,
     turnIndex: 0,
-    shields: [],          // protection cards placed on the landmark (each = SHIELD_PER_CARD)
     teams: [],
     phase: 'turn',        // 'turn' | 'ended'
     winnerId: null,
@@ -296,15 +299,15 @@ function newGame(teamCount, landmarkKey, names) {
   names = names || [];
   for (let i = 0; i < teamCount; i++) {
     const custom = (names[i] || '').trim();
-    state.teams.push({ id: i, name: custom || ('Team ' + letter(i)), color: TEAM_COLORS[i], hand: [], damage: 0 });
+    const hand = [];
+    for (let c = 0; c < CONFIG.START_CARDS; c++) hand.push(drawCard()); // dealt a starting hand
+    state.teams.push({ id: i, name: custom || ('Team ' + letter(i)), color: TEAM_COLORS[i], hand, damage: 0 });
   }
   reshuffleQuestions();
   save();
 }
 
 function currentTeam() { return state.teams[state.turnIndex]; }
-
-function totalShield() { return state.shields.length * CONFIG.SHIELD_PER_CARD; }
 
 function handCounts(team) {
   const c = { windshear: 0, moisture: 0, instability: 0, lift: 0, protection: 0 };
@@ -389,19 +392,6 @@ function renderBoard() {
   $('#healthNum').textContent = state.health;
   $('.health-num').innerHTML = `<span id="healthNum">${state.health}</span> / ${state.maxHealth}`;
 
-  // shield indicator
-  const sTotal = totalShield();
-  const chip = $('#shieldChip');
-  if (sTotal > 0) {
-    chip.classList.remove('none');
-    chip.textContent = `🛡️ Shield: ${sTotal} dmg absorbed — ${state.shields.length} card(s)`;
-    $('#shieldAura').classList.add('active');
-  } else {
-    chip.classList.add('none');
-    chip.textContent = '🛡️ Shield: 0 — no protection';
-    $('#shieldAura').classList.remove('active');
-  }
-
   // turn card
   const t = currentTeam();
   $('#turnNow').innerHTML = `<span style="color:${t.color}">${t.name}</span>'s turn`;
@@ -475,7 +465,7 @@ function revealCard(card) {
   } else {
     const d = protectionDef(card.type);
     html = `<div class="dc-icon">${d.icon}</div><div class="dc-name">${d.name}</div>
-            <div class="dc-type">Protection · absorbs ${CONFIG.SHIELD_PER_CARD} damage</div>
+            <div class="dc-type">Protection · intercept an attack (−${CONFIG.PROTECT_REDUCTION} dmg + steal an ingredient)</div>
             <div class="dc-note">${d.note}</div>`;
     front.className = 'draw-card-front dc-prot';
   }
@@ -507,10 +497,9 @@ function openActionPanel() {
     `<span class="mini-card ing">${i.icon} ${i.name}: ${counts[i.type]}</span>`
   ).join('') + `<span class="mini-card prot">🛡️ Protection: ${counts.protection}</span>`;
 
-  // enable/disable
+  // enable/disable (protection is reactive now — no action button for it)
   $('#launchMildBtn').disabled = !canLaunch(t, CONFIG.MILD_REQ);
   $('#launchSevereBtn').disabled = !canLaunch(t, CONFIG.SEVERE_REQ);
-  $('#protectBtn').disabled = counts.protection < 1;
 
   openModal('actionModal');
 }
@@ -521,51 +510,108 @@ function launchStorm(severe) {
   const req = severe ? CONFIG.SEVERE_REQ : CONFIG.MILD_REQ;
   const stormValue = severe ? CONFIG.SEVERE_DAMAGE : CONFIG.MILD_DAMAGE;
 
-  // consume ingredients
+  // consume the ingredients used (kept so an interceptor can steal one)
+  const consumed = [];
   INGREDIENTS.forEach(ing => {
     let removed = 0;
     state.teams[t.id].hand = t.hand.filter(card => {
-      if (removed < req && card.kind === 'ingredient' && card.type === ing.type) { removed++; return false; }
+      if (removed < req && card.kind === 'ingredient' && card.type === ing.type) {
+        removed++; consumed.push({ kind: 'ingredient', type: card.type }); return false;
+      }
       return true;
     });
   });
 
   closeModal('actionModal');
+  state._pendingStorm = { attackerId: t.id, severe, stormValue, consumed };
 
-  const shield = totalShield();
-  const damage = Math.max(CONFIG.MIN_CHIP_DAMAGE, stormValue - shield);
+  // who can intercept? any OTHER team holding at least one protection card
+  const defenders = state.teams.filter(d => d.id !== t.id && handCounts(d).protection > 0);
+  if (defenders.length === 0) {
+    resolveStorm(null);          // nobody can defend — the storm hits in full
+  } else {
+    openInterceptModal(t, severe, stormValue, defenders);
+  }
+}
+
+/* ---- Interception window ---- */
+function openInterceptModal(attacker, severe, stormValue, defenders) {
+  $('#interceptTitle').innerHTML =
+    `<span style="color:${attacker.color}">${attacker.name}</span> launches a ` +
+    `<b>${severe ? 'SEVERE' : 'mild'}</b> storm — <b>${stormValue}</b> damage`;
+
+  const opts = $('#interceptOptions');
+  opts.innerHTML = '';
+  defenders.forEach(d => {
+    const n = handCounts(d).protection;
+    const b = document.createElement('button');
+    b.className = 'intercept-opt';
+    b.innerHTML = `<span class="io-name"><span class="team-dot" style="background:${d.color}"></span>${d.name} intercepts 🛡️</span>` +
+                  `<span class="io-desc">−${CONFIG.PROTECT_REDUCTION} dmg · steal 1 ingredient · holds ${n} protection</span>`;
+    b.onclick = () => resolveStorm(d.id);
+    opts.appendChild(b);
+  });
+  openModal('interceptModal');
+}
+
+function resolveStorm(interceptorId) {
+  const p = state._pendingStorm;
+  const attacker = state.teams[p.attackerId];
+  let damage = p.stormValue;
+  let intercepted = false;
+  let stolen = null, interceptor = null;
+
+  if (interceptorId != null) {
+    interceptor = state.teams[interceptorId];
+    intercepted = true;
+    damage = Math.max(CONFIG.MIN_DAMAGE, p.stormValue - CONFIG.PROTECT_REDUCTION);
+
+    // discard one protection card from the interceptor
+    const pIdx = interceptor.hand.findIndex(c => c.kind === 'protection');
+    if (pIdx >= 0) interceptor.hand.splice(pIdx, 1);
+
+    // steal one random ingredient the attacker used for this storm
+    if (p.consumed.length) {
+      const sIdx = Math.floor(Math.random() * p.consumed.length);
+      stolen = p.consumed.splice(sIdx, 1)[0];
+      interceptor.hand.push({ kind: 'ingredient', type: stolen.type });
+    }
+  }
+
   const healthBefore = state.health;
   const dealt = Math.min(damage, healthBefore);
   state.health = Math.max(0, healthBefore - dealt);
-  t.damage += dealt;
+  attacker.damage += dealt;
+  state._pendingStorm = null;
 
-  // shields are temporary: absorb this one storm, then discarded
-  const hadShield = state.shields.length > 0;
-  state.shields = [];
-
-  animateStorm(severe, hadShield, () => {
+  closeModal('interceptModal');
+  animateStorm(p.severe, intercepted, () => {
     renderBoard();
     save();
-    const absorbed = Math.min(shield, stormValue - CONFIG.MIN_CHIP_DAMAGE);
-    const shieldNote = shield > 0 ? ` (shield absorbed ${Math.max(0, absorbed)})` : '';
-    toast(`${t.name} launched a ${severe ? 'SEVERE' : 'mild'} storm — ${dealt} damage dealt!${shieldNote}`);
+    if (intercepted) {
+      const ing = stolen ? ingredientDef(stolen.type) : null;
+      toast(`${interceptor.name} intercepted! ${dealt} damage` +
+            (ing ? ` · stole ${ing.icon} ${ing.name} from ${attacker.name}` : ''));
+    } else {
+      toast(`${attacker.name} launched a ${p.severe ? 'SEVERE' : 'mild'} storm — ${dealt} damage dealt!`);
+    }
 
     if (state.health <= 0) {
-      endGame(t.id, 'finishingBlow');
+      endGame(attacker.id, 'finishingBlow');
     } else {
       advanceTurn();
     }
   });
 }
 
-function animateStorm(severe, hadShield, done) {
+function animateStorm(severe, intercepted, done) {
   flashSky();
   thunder(severe ? 1.4 : 1);
   const art = $('#landmarkArt');
   const impact = $('#impact');
   const aura = $('#shieldAura');
 
-  if (hadShield) {
+  if (intercepted) {
     aura.classList.remove('active');
     aura.classList.add('absorb');
     setTimeout(() => aura.classList.remove('absorb'), 600);
@@ -575,49 +621,6 @@ function animateStorm(severe, hadShield, done) {
   art.classList.remove('shake'); void art.offsetWidth; art.classList.add('shake');
 
   setTimeout(done, 750);
-}
-
-/* ---- Protection ---- */
-function openProtectPicker() {
-  closeModal('actionModal');
-  pendingProtection = [];
-  const t = currentTeam();
-  const pick = $('#protectPick');
-  pick.innerHTML = '';
-  t.hand.forEach((card, idx) => {
-    if (card.kind !== 'protection') return;
-    const d = protectionDef(card.type);
-    const el = document.createElement('button');
-    el.className = 'pick-card';
-    el.dataset.idx = idx;
-    el.innerHTML = `<span class="pc-icon">${d.icon}</span>${d.name}`;
-    el.onclick = () => {
-      el.classList.toggle('selected');
-      const i = parseInt(el.dataset.idx, 10);
-      if (pendingProtection.includes(i)) pendingProtection = pendingProtection.filter(x => x !== i);
-      else pendingProtection.push(i);
-    };
-    pick.appendChild(el);
-  });
-  openModal('protectModal');
-}
-
-function confirmProtection() {
-  if (pendingProtection.length === 0) { toast('Select at least one protection card.'); return; }
-  const t = currentTeam();
-  // move selected protection cards from hand to landmark shields
-  const chosen = pendingProtection.slice().sort((a, b) => b - a); // remove high indices first
-  chosen.forEach(idx => {
-    const card = t.hand[idx];
-    state.shields.push(card);
-    t.hand.splice(idx, 1);
-  });
-  closeModal('protectModal');
-  $('#shieldAura').classList.add('active');
-  toast(`${t.name} shielded ${LANDMARKS[state.landmark].name} (+${chosen.length * CONFIG.SHIELD_PER_CARD} absorb)`);
-  renderBoard();
-  save();
-  advanceTurn();
 }
 
 function holdTurn() {
@@ -706,12 +709,10 @@ function bind() {
   // Action modal
   $('#launchMildBtn').onclick = () => launchStorm(false);
   $('#launchSevereBtn').onclick = () => launchStorm(true);
-  $('#protectBtn').onclick = openProtectPicker;
   $('#holdBtn').onclick = holdTurn;
 
-  // Protect modal
-  $('#protectCancelBtn').onclick = () => { closeModal('protectModal'); openActionPanel(); };
-  $('#protectConfirmBtn').onclick = confirmProtection;
+  // Interception modal
+  $('#noInterceptBtn').onclick = () => resolveStorm(null);
 
   // End
   $('#playAgainBtn').onclick = () => { renderSetup(); showScreen('screen-setup'); };
