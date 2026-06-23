@@ -126,6 +126,7 @@ function ingredientDef(type) { return INGREDIENTS.find(x => x.type === type); }
 function protectionDef(type) { return PROTECTIONS.find(x => x.type === type); }
 
 function showScreen(id) {
+  closeAllModals();   // never leave a modal stuck on top when switching screens
   $$('.screen').forEach(s => s.classList.remove('active'));
   $('#' + id).classList.add('active');
   // Reset/mute buttons visibility
@@ -134,6 +135,7 @@ function showScreen(id) {
 
 function openModal(id) { $('#' + id).classList.add('open'); }
 function closeModal(id) { $('#' + id).classList.remove('open'); }
+function closeAllModals() { $$('.modal-overlay.open').forEach(m => m.classList.remove('open')); }
 
 let toastTimer = null;
 function toast(msg) {
