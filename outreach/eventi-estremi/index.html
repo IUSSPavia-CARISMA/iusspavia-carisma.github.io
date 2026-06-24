@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fare i conti con gli eventi estremi — SOE 2026</title>
+  <meta name="description" content="Serious game per la SOE 2026 (IUSS Pavia · CARISMA). Adattamento di Decisions for the Seasons, Red Cross Climate Centre." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Cielo animato di sfondo -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky-sun"></div>
+    <div class="cloud cloud-a"></div>
+    <div class="cloud cloud-b"></div>
+    <div class="cloud cloud-c"></div>
+  </div>
+
+  <!-- Pulsante mute (sempre accessibile) -->
+  <button id="muteBtn" class="mute-btn" type="button" title="Attiva/disattiva audio" aria-label="Audio">🔊</button>
+
+  <!-- =================== SETUP =================== -->
+  <section id="screen-setup" class="screen is-active">
+    <div class="setup-card">
+      <header class="setup-header">
+        <h1 class="title">Fare i conti con gli <span class="accent">eventi estremi</span></h1>
+        <p class="subtitle">IUSS Pavia · CARISMA - SOE 2026</p>
+      </header>
+
+      <div class="setup-grid">
+        <div class="field">
+          <label class="field-label">Numero di consorzi</label>
+          <div class="stepper">
+            <button id="teamsMinus" class="step-btn" type="button">−</button>
+            <span id="teamsCount" class="step-value">4</span>
+            <button id="teamsPlus" class="step-btn" type="button">+</button>
+          </div>
+        </div>
+
+        <div class="field field-coop">
+          <label class="field-label">Fondo di solidarietà</label>
+          <label class="switch">
+            <input id="coopToggle" type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Nomi dei consorzi</label>
+        <div id="teamNames" class="team-names"></div>
+      </div>
+
+      <details class="advanced">
+        <summary>Opzioni avanzate</summary>
+        <div class="advanced-grid">
+          <label>Fagioli iniziali <input id="cfgBeans" type="number" min="4" max="20" value="10" /></label>
+          <label>Numero di anni <input id="cfgYears" type="number" min="2" max="6" value="3" /></label>
+        </div>
+      </details>
+
+      <button id="startBtn" class="primary-btn big" type="button">Inizia la partita</button>
+    </div>
+  </section>
+
+  <!-- =================== TABELLONE =================== -->
+  <section id="screen-board" class="screen">
+    <header class="board-top">
+      <div class="board-top-left">
+        <div id="yearBadge" class="year-badge">Anno 1 / 3</div>
+        <div id="phaseLabel" class="phase-label">Investimenti</div>
+      </div>
+
+      <div class="die-zone">
+        <div id="die" class="die die-d6" aria-live="polite">6</div>
+        <div id="dieType" class="die-type">dado a 6 facce</div>
+      </div>
+
+      <table class="rules-table">
+        <thead>
+          <tr><th></th><th>☀️ Siccità</th><th>🌤️ Media</th><th>🌊 Alluvione</th></tr>
+        </thead>
+        <tbody>
+          <tr id="ruleD6"><th>d6</th><td>1</td><td>2–5</td><td>6</td></tr>
+          <tr id="ruleD8"><th>d8</th><td>1–2</td><td>3–5</td><td>6–8</td></tr>
+        </tbody>
+      </table>
+
+      <div id="fundBox" class="fund-box">
+        <h3>Fondo di solidarietà</h3>
+        <div class="fund-beans"><span id="fundBeans">0</span> 🫘</div>
+        <div class="fund-cap">fagioli versati</div>
+      </div>
+    </header>
+
+    <main id="teamsBoard" class="teams-board"></main>
+
+    <footer class="board-bottom">
+      <div class="control-buttons">
+        <button id="investDoneBtn" class="primary-btn" type="button">Investimenti completati</button>
+        <button id="backInvestBtn" class="ghost-btn hidden" type="button">↩ Modifica investimenti</button>
+        <button id="rollDiceBtn" class="primary-btn hidden" type="button">🌧️ Simula la precipitazione</button>
+        <button id="nextYearBtn" class="primary-btn hidden" type="button">Anno successivo</button>
+        <button id="resetBtn" class="ghost-btn" type="button">Reset</button>
+      </div>
+    </footer>
+
+    <!-- Messaggi rapidi -->
+    <div id="weatherOverlay" class="weather-overlay" aria-hidden="true">
+      <div id="weatherIcon" class="weather-icon">⚠️</div>
+      <div id="weatherText" class="weather-text"></div>
+    </div>
+
+    <!-- Lancio dei dadi a tutto schermo: distretto per distretto -->
+    <div id="rollOverlay" class="roll-overlay" aria-hidden="true">
+      <div class="roll-stage">
+        <div id="rollDistrict" class="roll-district">Distretto 1 / 10</div>
+        <div class="roll-top">
+          <div id="bigDie" class="dice3d d6"></div>
+          <div id="rollResult" class="roll-result"></div>
+        </div>
+        <div id="regionStrip" class="region-strip"></div>
+        <div id="rollSummary" class="roll-summary"></div>
+        <div class="roll-buttons">
+          <button id="nextRollBtn" class="primary-btn" type="button">Fai piovere sul distretto</button>
+          <button id="rollAllBtn" class="ghost-btn" type="button">Fai piovere su tutti</button>
+          <button id="rollContinueBtn" class="primary-btn big hidden" type="button">Vedi gli esiti</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay comparsa del nuovo dado -->
+    <div id="climateOverlay" class="climate-overlay" aria-hidden="true">
+      <div class="climate-inner">
+        <div class="climate-dice">
+          <span class="climate-d6">d6</span>
+          <span class="climate-arrow">→</span>
+          <span class="climate-d8">d8</span>
+        </div>
+        <h2>Nuovo dado!</h2>
+        <p>Da ora si tira un dado a 8 facce.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== PODIO / DEBRIEF =================== -->
+  <section id="screen-podium" class="screen">
+    <h1 class="title podium-title">Risultati finali</h1>
+    <div id="podium" class="podium"></div>
+    <div id="finalTable" class="final-table"></div>
+
+    <button id="restartBtn" class="primary-btn big" type="button">Nuova partita</button>
+  </section>
+
+  <script src="game.js?v=20260624"></script>
+</body>
+</html>

@@ -20,6 +20,7 @@ permalink: /outreach/
     </div>
     <div class="education-course-card">
       <h4>Fare i conti con gli eventi estremi</h4>
+      <a class="education-card-cta" style="text-decoration: none;" href="{{ '/outreach/eventi-estremi/' | relative_url }}">&#127922; Gioca a &laquo;Fare i conti con gli eventi estremi&raquo;</a>
     </div>
   </div>
 </section>
