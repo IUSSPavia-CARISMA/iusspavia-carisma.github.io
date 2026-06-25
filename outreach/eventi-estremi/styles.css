@@ -467,9 +467,15 @@ body { position: relative; }
 .dist-slot.set.band-flood   { background: rgba(63,111,138,.5); }
 .dist-slot.set.band-center  { background: rgba(95,158,84,.45); }
 .dist-slot.set.band-drought { background: rgba(181,115,46,.5); }
-.dist-slot.ok     { box-shadow: inset 0 0 0 2px var(--green); }
-.dist-slot.miss   { opacity: .45; }
-.dist-slot.crisis { box-shadow: inset 0 0 0 2px var(--crisis); }
+.dist-slot.clickable { cursor: pointer; transition: transform .08s, border-color .15s; }
+.dist-slot.clickable:hover { border-color: var(--grain); transform: translateY(-1px); }
+.dist-slot.ok        { box-shadow: inset 0 0 0 2px var(--green); }
+.dist-slot.miss      { opacity: .45; }
+.dist-slot.crisis    { box-shadow: inset 0 0 0 2px var(--crisis); }
+.dist-slot.uncovered { box-shadow: inset 0 0 0 2px var(--crisis); background: rgba(226,59,59,.22); opacity: .9; }
+.dist-slot.calm { opacity: .3; }   /* distretto scoperto senza evento estremo (a fine anno) */
+.dist-legend { font-size: .72rem; color: rgba(255,255,255,.5); margin: 2px 0 -2px; }
+.res-save { color: var(--teal-2); font-weight: 700; }
 
 .result-line { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 4px; font-weight: 700; font-size: .95rem; }
 .result-line .res-kept { color: var(--green); }

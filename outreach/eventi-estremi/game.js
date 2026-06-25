@@ -170,7 +170,7 @@ function load() {
 }
 function dieTypeForYear(year) { return year >= CONFIG.NEW_DIE_YEAR ? 'd8' : 'd6'; }
 function teamBudget(t) { return t.available - (t.fundContribution || 0); }
-function teamAllocated(t) { return t.districts.length; }
+function teamAllocated(t) { return t.districts.filter(Boolean).length; }
 function teamRemaining(t) { return teamBudget(t) - teamAllocated(t); }
 
 /* ----------------------- SETUP UI ----------------------- */
@@ -216,7 +216,7 @@ function startGame() {
       name: (setup.names[i] || ('Cooperativa ' + (i + 1))).trim() || ('Cooperativa ' + (i + 1)),
       color: CONFIG.TEAM_COLORS[i % CONFIG.TEAM_COLORS.length],
       available: CONFIG.START_BEANS,
-      districts: [],            // scommesse in ordine di distretto: 'flood' | 'harvest' | 'drought'
+      districts: new Array(CONFIG.REGIONS).fill(null),  // scommessa per distretto: 'flood'|'harvest'|'drought'|null
       fundContribution: 0,
       crises: 0,
       lastResult: null,
@@ -249,38 +249,37 @@ function enterInvest() {
   state.phase = 'invest';
   animating = false;
   state.outcomeFace = null;
-  state.teams.forEach(t => { t.districts = []; t.fundContribution = 0; t.lastResult = null; });
+  state.teams.forEach(t => { t.districts = new Array(CONFIG.REGIONS).fill(null); t.fundContribution = 0; t.lastResult = null; });
   state.dieType = state.d8Revealed ? dieTypeForYear(state.year) : 'd6';
   save();
   renderBoard();
 }
-// Mette una scommessa nel prossimo distretto (in ordine).
-function placeBet(teamId, type) {
-  const t = state.teams[teamId];
-  if (teamRemaining(t) <= 0) return;
-  t.districts.push(type);
-  save(); renderBoard();
+function removeLastBet(t) {
+  for (let j = t.districts.length - 1; j >= 0; j--) { if (t.districts[j]) { t.districts[j] = null; return; } }
 }
-// Toglie l'ultima scommessa messa.
-function undoBet(teamId) {
+// Clic su un distretto: cicla la scommessa  vuoto → 🌊 → 🌾 → ☀️ → vuoto.
+function cycleDistrict(teamId, i) {
   const t = state.teams[teamId];
-  if (t.districts.length === 0) return;
-  t.districts.pop();
+  const cur = t.districts[i];
+  if (cur === null) {
+    if (teamRemaining(t) <= 0) { flashMessage('Nessun fagiolo libero da mettere.'); return; }
+    t.districts[i] = 'flood';
+  } else if (cur === 'flood') t.districts[i] = 'harvest';
+  else if (cur === 'harvest') t.districts[i] = 'drought';
+  else t.districts[i] = null;   // ☀️ → vuoto (libera il fagiolo)
   save(); renderBoard();
 }
 function toggleFund(teamId, on) {
   const t = state.teams[teamId];
   if (on) {
-    if (teamRemaining(t) <= 0 && t.fundContribution === 0) { renderBoard(); return; }
     t.fundContribution = 1;
-    while (t.districts.length > teamBudget(t)) t.districts.pop(); // libera l'ultimo fagiolo per il Fondo
+    while (teamRemaining(t) < 0) removeLastBet(t); // se sfora il budget, libera un fagiolo per il Fondo
   } else t.fundContribution = 0;
   save(); renderBoard();
 }
-function allTeamsAllocated() { return state.teams.every(t => teamRemaining(t) === 0); }
 
 function confirmInvest() {
-  if (!allTeamsAllocated()) { flashMessage('Ogni squadra deve distribuire tutti i fagioli che ha.'); return; }
+  // si può avanzare anche con fagioli non investiti: restano per l'anno dopo
   const needReveal = state.year >= CONFIG.NEW_DIE_YEAR && !state.d8Revealed;
   if (needReveal) {
     animating = true;
@@ -384,16 +383,22 @@ function resolveYear() {
   state.teams.forEach(t => {
     let kept = 0, lost = 0, crisis = 0;
     const outcomes = [];
-    t.districts.forEach((bet, i) => {
+    for (let i = 0; i < CONFIG.REGIONS; i++) {
       const w = state.rolls[i] ? state.rolls[i].weather : 'm';
-      if (betMatches(bet, w)) { kept++; outcomes.push('ok'); }
-      else { lost++; if (w === 'f' || w === 'd') { crisis++; outcomes.push('crisis'); } else outcomes.push('miss'); }
-    });
+      const bet = t.districts[i] || null;
+      const extreme = (w === 'f' || w === 'd');
+      if (!bet) {
+        // distretto scoperto: crisi se capita un evento estremo (nessun fagiolo perso)
+        if (extreme) { crisis++; outcomes.push('uncovered'); } else outcomes.push('calm');
+      } else if (betMatches(bet, w)) { kept++; outcomes.push('ok'); }
+      else { lost++; if (extreme) { crisis++; outcomes.push('crisis'); } else outcomes.push('miss'); }
+    }
     // Fondo di solidarietà: annulla le crisi finché ha fagioli
     if (state.coopEnabled) { while (crisis > 0 && state.fondo > 0) { crisis--; state.fondo--; } }
+    const unallocated = Math.max(0, t.available - teamAllocated(t)); // fagioli non investiti: restano
     t.crises += crisis;
-    t.available = kept;
-    t.lastResult = { kept, lost, crisis, outcomes };
+    t.available = kept + unallocated;
+    t.lastResult = { kept, lost, crisis, unallocated, outcomes };
     if (crisis > 0) anyCrisis = true;
   });
   state.phase = 'yearEnd';
@@ -460,7 +465,7 @@ function renderTeams() {
     const remaining = teamRemaining(t);
     const full = remaining === 0;
 
-    // riga dei distretti: scommessa per distretto, con esito se disponibile
+    // riga dei distretti: scommessa per distretto (cliccabile in fase investimenti), con esito se disponibile
     const res = t.lastResult;
     let slots = '<div class="dist-slots">';
     for (let i = 0; i < CONFIG.REGIONS; i++) {
@@ -468,20 +473,16 @@ function renderTeams() {
       let cls = 'dist-slot', content = (i + 1);
       if (bet) { cls += ' set ' + BET[bet].cls; content = BET[bet].icon; }
       else cls += ' empty';
-      if (showResult && res && res.outcomes && i < res.outcomes.length) cls += ' ' + res.outcomes[i];
-      slots += `<span class="${cls}" title="Distretto ${i + 1}">${content}</span>`;
+      if (invest) cls += ' clickable';
+      if (showResult && res && res.outcomes && i < res.outcomes.length) {
+        cls += ' ' + res.outcomes[i];
+        if (res.outcomes[i] === 'uncovered' && state.rolls[i]) content = WEATHER[state.rolls[i].weather].icon;
+      }
+      const attrs = invest ? ` data-act="dist" data-team="${t.id}" data-i="${i}" role="button"` : '';
+      slots += `<span class="${cls}"${attrs} title="Distretto ${i + 1}">${content}</span>`;
     }
     slots += '</div>';
-
-    let betButtons = '';
-    if (invest) {
-      betButtons = `<div class="bet-buttons">
-          <button type="button" class="bet-btn band-flood"  data-act="bet" data-team="${t.id}" data-type="flood"   ${full ? 'disabled' : ''}>🌊</button>
-          <button type="button" class="bet-btn band-center" data-act="bet" data-team="${t.id}" data-type="harvest" ${full ? 'disabled' : ''}>🌾</button>
-          <button type="button" class="bet-btn band-drought" data-act="bet" data-team="${t.id}" data-type="drought" ${full ? 'disabled' : ''}>☀️</button>
-          <button type="button" class="bet-btn undo" data-act="undo" data-team="${t.id}" ${t.districts.length ? '' : 'disabled'}>↶</button>
-        </div>`;
-    }
+    const legend = invest ? `<div class="dist-legend">Clicca un distretto: ⬚ → 🌊 → 🌾 → ☀️ → ⬚</div>` : '';
 
     let fund = '';
     if (state.coopEnabled && state.year >= CONFIG.NEW_DIE_YEAR) {
@@ -491,10 +492,14 @@ function renderTeams() {
 
     let foot = '';
     if (invest) {
-      foot = `<div class="card-foot"><span class="remaining-pill ${full ? 'full' : ''}">${full ? '✓ pronti' : 'distretto ' + (t.districts.length + 1) + ' · ' + remaining + ' ' + CONFIG.BEAN + ' da mettere'}</span>${fund}</div>`;
+      const pill = remaining > 0
+        ? `<span class="remaining-pill">${remaining} ${CONFIG.BEAN} liberi · restano</span>`
+        : `<span class="remaining-pill full">✓ tutti investiti</span>`;
+      foot = `<div class="card-foot">${pill}${fund}</div>`;
     } else if (showResult && res) {
       foot = `<div class="result-line">
           <span class="res-kept">✅ ${res.kept} tenuti</span>
+          ${res.unallocated ? `<span class="res-save">💤 ${res.unallocated} non inv.</span>` : ''}
           <span class="res-lost">❌ ${res.lost} persi</span>
           ${res.crisis > 0 ? `<span class="res-crisis">${CONFIG.CRISIS} ${res.crisis}</span>` : ''}
         </div>`;
@@ -508,17 +513,14 @@ function renderTeams() {
         <span class="beans-left">${CONFIG.BEAN} ${t.available}</span>
       </div>
       <div class="card-stats"><span class="st-crisis">${CONFIG.CRISIS} ${t.crises} crisi</span></div>
-      ${betButtons}
+      ${legend}
       ${slots}
       ${foot}`;
     board.appendChild(card);
   });
 
-  board.querySelectorAll('button[data-act="bet"]').forEach(btn => {
-    btn.addEventListener('click', () => placeBet(+btn.dataset.team, btn.dataset.type));
-  });
-  board.querySelectorAll('button[data-act="undo"]').forEach(btn => {
-    btn.addEventListener('click', () => undoBet(+btn.dataset.team));
+  board.querySelectorAll('[data-act="dist"]').forEach(el => {
+    el.addEventListener('click', () => cycleDistrict(+el.dataset.team, +el.dataset.i));
   });
   board.querySelectorAll('input[data-act="fund"]').forEach(chk => {
     chk.addEventListener('change', () => toggleFund(+chk.dataset.team, chk.checked));
@@ -542,7 +544,7 @@ function renderControls() {
   const ids = ['investDoneBtn', 'backInvestBtn', 'rollDiceBtn', 'nextYearBtn'];
   ids.forEach(id => $('#' + id).classList.add('hidden'));
   if (state.phase === 'invest') {
-    const b = $('#investDoneBtn'); b.classList.remove('hidden'); b.disabled = !allTeamsAllocated();
+    const b = $('#investDoneBtn'); b.classList.remove('hidden'); b.disabled = false;
   } else if (state.phase === 'recap') {
     $('#backInvestBtn').classList.remove('hidden');
     $('#rollDiceBtn').classList.remove('hidden');
