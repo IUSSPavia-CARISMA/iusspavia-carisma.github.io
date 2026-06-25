@@ -33,17 +33,9 @@
           <label class="field-label">Numero di consorzi</label>
           <div class="stepper">
             <button id="teamsMinus" class="step-btn" type="button">−</button>
-            <span id="teamsCount" class="step-value">4</span>
+            <span id="teamsCount" class="step-value">6</span>
             <button id="teamsPlus" class="step-btn" type="button">+</button>
           </div>
-        </div>
-
-        <div class="field field-coop">
-          <label class="field-label">Fondo di solidarietà</label>
-          <label class="switch">
-            <input id="coopToggle" type="checkbox" checked />
-            <span class="slider"></span>
-          </label>
         </div>
       </div>
 
@@ -55,7 +47,14 @@
       <details class="advanced">
         <summary>Opzioni avanzate</summary>
         <div class="advanced-grid">
-          <label>Fagioli iniziali <input id="cfgBeans" type="number" min="4" max="20" value="10" /></label>
+          <div class="adv-field">
+            <span>Fondo di solidarietà</span>
+            <label class="switch">
+              <input id="coopToggle" type="checkbox" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <label>Budget iniziale <input id="cfgBeans" type="number" min="4" max="20" value="10" /></label>
           <label>Numero di anni <input id="cfgYears" type="number" min="2" max="6" value="3" /></label>
         </div>
       </details>
@@ -83,14 +82,14 @@
         </thead>
         <tbody>
           <tr id="ruleD6"><th>d6</th><td>1</td><td>2–5</td><td>6</td></tr>
-          <tr id="ruleD8"><th>d8</th><td>1–2</td><td>3–5</td><td>6–8</td></tr>
+          <tr id="ruleD8"><th>d8</th><td>1–2</td><td>3–6</td><td>7–8</td></tr>
         </tbody>
       </table>
 
       <div id="fundBox" class="fund-box">
         <h3>Fondo di solidarietà</h3>
-        <div class="fund-beans"><span id="fundBeans">0</span> 🫘</div>
-        <div class="fund-cap">fagioli versati</div>
+        <div class="fund-beans"><span id="fundBeans">0</span> 🪙</div>
+        <div class="fund-cap">budget versato</div>
       </div>
     </header>
 
@@ -132,14 +131,14 @@
 
     <!-- Overlay comparsa del nuovo dado -->
     <div id="climateOverlay" class="climate-overlay" aria-hidden="true">
+      <div class="climate-flash"></div>
       <div class="climate-inner">
-        <div class="climate-dice">
-          <span class="climate-d6">d6</span>
-          <span class="climate-arrow">→</span>
-          <span class="climate-d8">d8</span>
+        <div class="newdie-burst">
+          <span>🎲</span><span>✨</span><span>⚡</span><span>🎲</span><span>✨</span><span>⚡</span><span>🎲</span><span>✨</span>
         </div>
+        <div class="newdie-badge">8</div>
         <h2>Nuovo dado!</h2>
-        <p>Da ora si tira un dado a 8 facce.</p>
+        <p>Ora si tira un <strong>dado a 8 facce</strong> — più facce, più imprevisti!</p>
       </div>
     </div>
   </section>
