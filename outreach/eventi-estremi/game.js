@@ -30,7 +30,7 @@ const CONFIG = {
   // Mappa delle facce -> precipitazione. 'd' = siccità, 'm' = media, 'f' = alluvione.
   DICE: {
     d6: { sides: 6, map: { 1:'d', 2:'m', 3:'m', 4:'m', 5:'m', 6:'f' } },
-    d8: { sides: 8, map: { 1:'d', 2:'d', 3:'m', 4:'m', 5:'m', 6:'f', 7:'f', 8:'f' } },
+    d8: { sides: 8, map: { 1:'d', 2:'d', 3:'m', 4:'m', 5:'m', 6:'m', 7:'f', 8:'f' } },
   },
 
   DIE_ROLL_MS: 700,          // durata animazione di lancio del dado
@@ -579,24 +579,49 @@ function buildCube(dieType, face) {
   });
   big.innerHTML = html + '</div>';
 }
-// Lancio del cubo: tumble su due assi che decelera e si ferma sulla faccia giusta.
+// ---- d8: vero ottaedro (8 facce triangolari) ----
+const OCTA_REST_X = -16, OCTA_REST_Y = 0;   // orientamento a riposo (mostra la faccia frontale-alta)
+function buildOcta(face) {
+  const big = $('#bigDie');
+  big.className = 'dice3d d8';
+  const others = [1, 2, 3, 4, 5, 6, 7, 8].filter(n => n !== face);
+  // la faccia t0 (frontale-alta) mostra il risultato; le altre numeri distinti
+  const nums = [face, others[0], others[2], others[4], others[1], others[3], others[5], others[6]];
+  let html = '<div class="octa">';
+  for (let k = 0; k < 4; k++) html += '<div class="octa-face top t' + k + '"><span>' + nums[k] + '</span></div>';
+  for (let k = 0; k < 4; k++) html += '<div class="octa-face bot b' + k + '"><span>' + nums[4 + k] + '</span></div>';
+  big.innerHTML = html + '</div>';
+}
+function rollOcta(face) {
+  buildOcta(face);
+  const octa = $('#bigDie .octa');
+  const sx = 2 + Math.floor(Math.random() * 3);
+  const sy = 2 + Math.floor(Math.random() * 3);
+  octa.style.transition = 'none';
+  octa.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  void octa.offsetWidth;
+  octa.style.transition = 'transform ' + (CONFIG.DIE_ROLL_MS / 1000) + 's cubic-bezier(.2,.72,.28,1)';
+  octa.style.transform = 'rotateX(' + (OCTA_REST_X + 360 * sx) + 'deg) rotateY(' + (OCTA_REST_Y + 360 * sy) + 'deg)';
+}
+// Lancio: cubo (d6) o ottaedro (d8) che decelera e si ferma sulla faccia col risultato.
 function rollBigDie(dieType, face) {
+  if (dieType === 'd8') { rollOcta(face); return; }
   buildCube(dieType, face);
   const cube = $('#bigDie .cube');
   const sx = 2 + Math.floor(Math.random() * 3);
   const sy = 2 + Math.floor(Math.random() * 3);
-  let x = 0, y = 0;
-  if (dieType === 'd6') { const fr = FACE_ROT[face]; x = fr.x; y = fr.y; }
+  const fr = FACE_ROT[face];
   const rz = Math.floor(Math.random() * 24) - 12;   // leggera inclinazione in piano (carattere)
-  const tx = x + 360 * sx;
-  const ty = y + 360 * sy;
   cube.style.transition = 'none';
   cube.style.transform = 'rotateX(-24deg) rotateY(24deg) rotateZ(0deg)';
   void cube.offsetWidth;
   cube.style.transition = 'transform ' + (CONFIG.DIE_ROLL_MS / 1000) + 's cubic-bezier(.2,.72,.28,1)';
-  cube.style.transform = 'rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) rotateZ(' + rz + 'deg)';
+  cube.style.transform = 'rotateX(' + (fr.x + 360 * sx) + 'deg) rotateY(' + (fr.y + 360 * sy) + 'deg) rotateZ(' + rz + 'deg)';
 }
-function restCube(dieType) { buildCube(dieType, dieType === 'd8' ? 8 : 6); const c = $('#bigDie .cube'); if (c) c.style.transform = 'rotateX(-24deg) rotateY(24deg)'; }
+function restCube(dieType) {
+  if (dieType === 'd8') { buildOcta(8); const o = $('#bigDie .octa'); if (o) o.style.transform = 'rotateX(' + OCTA_REST_X + 'deg) rotateY(' + OCTA_REST_Y + 'deg)'; return; }
+  buildCube(dieType, 6); const c = $('#bigDie .cube'); if (c) c.style.transform = 'rotateX(-24deg) rotateY(24deg)';
+}
 
 function hideBigRoll() { $('#rollOverlay').classList.remove('show'); }
 
@@ -604,7 +629,7 @@ function playNewDie(done) {
   const ov = $('#climateOverlay');
   ov.classList.add('show');
   Audio.thunder();
-  setTimeout(() => Audio.thunder(), 600);
+  setTimeout(() => Audio.fanfare(), 450);
   setTimeout(() => { ov.classList.remove('show'); state.d8Revealed = true; save(); if (done) done(); }, CONFIG.NEW_DIE_ANIM_MS);
 }
 
