@@ -38,7 +38,7 @@ const CONFIG = {
   NEW_DIE_ANIM_MS: 3200,     // durata animazione comparsa del nuovo dado
 
   CRISIS: '🆘',              // emoji della crisi umanitaria (cartellino rosso)
-  BEAN: '🫘',
+  BEAN: '🪙',
 
   DEFAULT_NAMES: [
     'Cooperativa Terre d\'Acqua', 'Cooperativa Cascina Verde', 'Cooperativa San Martino',
@@ -59,7 +59,7 @@ const WEATHER = {
 // Tipi di scommessa che si mettono nei distretti, in ordine.
 const BET = {
   flood:   { icon:'🌊', label:'Alluvione', cls:'band-flood' },
-  harvest: { icon:'🌾', label:'Raccolto',  cls:'band-center' },
+  harvest: { icon:'👍', label:'Raccolto',  cls:'band-center' },
   drought: { icon:'☀️', label:'Siccità',   cls:'band-drought' },
 };
 function betMatches(bet, wKey) { return bet && WEATHER[wKey] && WEATHER[wKey].bet === bet; }
@@ -69,9 +69,9 @@ const STORAGE_KEY = 'eventi-estremi-soe2026';
 /* ----------------------- STATO ----------------------- */
 let state = null;
 let setup = {
-  teams: 4,
+  teams: 6,
   coop: CONFIG.COOP_DEFAULT,
-  names: CONFIG.DEFAULT_NAMES.slice(0, 4),
+  names: CONFIG.DEFAULT_NAMES.slice(0, 6),
 };
 let animating = false;
 
@@ -419,7 +419,7 @@ function nextYear() {
   // a inizio di ogni nuovo anno ogni squadra riceve fagioli extra
   state.teams.forEach(t => { t.available += CONFIG.YEARLY_BONUS; });
   enterInvest();
-  if (CONFIG.YEARLY_BONUS > 0) flashMessage('Nuovo anno · +' + CONFIG.YEARLY_BONUS + ' 🫘 a ogni squadra', '🫘');
+  if (CONFIG.YEARLY_BONUS > 0) flashMessage('Nuovo anno · +' + CONFIG.YEARLY_BONUS + ' ' + CONFIG.BEAN + ' a ogni squadra', CONFIG.BEAN);
 }
 
 /* ----------------------- RENDER ----------------------- */
@@ -482,7 +482,7 @@ function renderTeams() {
       slots += `<span class="${cls}"${attrs} title="Distretto ${i + 1}">${content}</span>`;
     }
     slots += '</div>';
-    const legend = invest ? `<div class="dist-legend">Clicca un distretto: ⬚ → 🌊 → 🌾 → ☀️ → ⬚</div>` : '';
+    const legend = invest ? `<div class="dist-legend">Clicca un distretto: ⬚ → 🌊 → 👍 → ☀️ → ⬚</div>` : '';
 
     let fund = '';
     if (state.coopEnabled && state.year >= CONFIG.NEW_DIE_YEAR) {

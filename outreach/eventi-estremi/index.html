@@ -33,17 +33,9 @@
           <label class="field-label">Numero di consorzi</label>
           <div class="stepper">
             <button id="teamsMinus" class="step-btn" type="button">−</button>
-            <span id="teamsCount" class="step-value">4</span>
+            <span id="teamsCount" class="step-value">6</span>
             <button id="teamsPlus" class="step-btn" type="button">+</button>
           </div>
-        </div>
-
-        <div class="field field-coop">
-          <label class="field-label">Fondo di solidarietà</label>
-          <label class="switch">
-            <input id="coopToggle" type="checkbox" checked />
-            <span class="slider"></span>
-          </label>
         </div>
       </div>
 
@@ -55,7 +47,14 @@
       <details class="advanced">
         <summary>Opzioni avanzate</summary>
         <div class="advanced-grid">
-          <label>Fagioli iniziali <input id="cfgBeans" type="number" min="4" max="20" value="10" /></label>
+          <div class="adv-field">
+            <span>Fondo di solidarietà</span>
+            <label class="switch">
+              <input id="coopToggle" type="checkbox" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <label>Budget iniziale <input id="cfgBeans" type="number" min="4" max="20" value="10" /></label>
           <label>Numero di anni <input id="cfgYears" type="number" min="2" max="6" value="3" /></label>
         </div>
       </details>
@@ -89,8 +88,8 @@
 
       <div id="fundBox" class="fund-box">
         <h3>Fondo di solidarietà</h3>
-        <div class="fund-beans"><span id="fundBeans">0</span> 🫘</div>
-        <div class="fund-cap">fagioli versati</div>
+        <div class="fund-beans"><span id="fundBeans">0</span> 🪙</div>
+        <div class="fund-cap">budget versato</div>
       </div>
     </header>
 
