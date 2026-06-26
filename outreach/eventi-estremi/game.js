@@ -206,8 +206,9 @@ function initSetup() {
 /* ----------------------- AVVIO PARTITA ----------------------- */
 function startGame() {
   Audio.ensure();
-  CONFIG.START_BEANS = clampInt($('#cfgBeans').value, 4, 20, 10);
-  CONFIG.YEARS       = clampInt($('#cfgYears').value, 2, 6, 3);
+  CONFIG.START_BEANS  = clampInt($('#cfgBeans').value, 4, 20, 10);
+  CONFIG.YEARLY_BONUS = clampInt($('#cfgBonus').value, 0, 20, 2);
+  CONFIG.YEARS        = clampInt($('#cfgYears').value, 2, 6, 3);
 
   const teams = [];
   for (let i = 0; i < setup.teams; i++) {
